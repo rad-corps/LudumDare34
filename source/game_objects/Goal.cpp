@@ -9,9 +9,9 @@ Goal::Goal(void)
 {
 	active = true;
 
-	UVTranslator translator(800,1280,16,16);
+	UVTranslator trans(TERR_SPRITESHEET_W,TERR_SPRITESHEET_H,TERR_TILE_S,TERR_TILE_S);
 	//translator.GetUV(UVs,51,38);
-	translator.GetUV(UVs,10,0);
+	trans.GetUV(UVs,10,0);
 
 	width = TILE_S;
 	height = TILE_S;

@@ -4,11 +4,12 @@
 #include <vector>
 #include <map>
 #include "../GLAH/InputListener.h"
+#include "../game_objects/Player.h"
 
 class PSLevelSelect : public ProgramState, public InputListener
 {
 public:
-	PSLevelSelect(void);
+	PSLevelSelect(std::vector<Player*> players_);
 	~PSLevelSelect(void);
 
 	virtual ProgramState* Update(float delta_);
@@ -24,5 +25,6 @@ private:
 	int selection; //the vector subscript index (not the database level id)
 	std::map<int, int> levelMap; //vector subcript, level ID
 	ProgramState* nextProgramState;
+	std::vector<Player*> players;
 };
 

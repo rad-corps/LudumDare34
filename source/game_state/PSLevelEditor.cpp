@@ -38,7 +38,7 @@ Platform* PSLevelEditor::currentPlatform = nullptr;
 void PSLevelEditor::Init()
 {
 	newProgramState=nullptr;
-	UVTranslator trans(800,1280,16,16);
+	UVTranslator trans(TERR_SPRITESHEET_W,TERR_SPRITESHEET_H,TERR_TILE_S,TERR_TILE_S);
 	trans.GetUV(uv, 16, 0);
 
 	AddInputListener(this);
@@ -96,7 +96,7 @@ PSLevelEditor::PSLevelEditor(int levelID_)
 {
 	
 	DBLevel dbLevel;
-	dbLevel.FillData(levelID_, platforms, player, cannon, enemySpawners, goal);
+	dbLevel.FillData(levelID_, platforms, cannon, enemySpawners, goal);
 	Init();
 	
 }
@@ -162,7 +162,7 @@ void PSLevelEditor::HandleNameInput(SDL_Keycode key_)
 		cout << "...Saving Level..." << endl;
 		saving = false;
 		DBLevel db;
-		db.SaveData(platforms, player, cannon, levelName, enemySpawners, goal);
+		db.SaveData(platforms, cannon, levelName, enemySpawners, goal);
 		inputName = false;
 		promptText.SetText(levelName + " Saved");
 	}
@@ -201,7 +201,7 @@ void PSLevelEditor::KeyDown(SDL_Keycode key_)
 	if( key_ == SDLK_RIGHT) 	++col;
 	if ( key_ == SDLK_SPACE )	SetPlatformTile();
 	if ( key_ == SDLK_o )		cannon.SetPos(col, row);
-	if ( key_ == SDLK_p)		player.SetPos(col, row);
+//	if ( key_ == SDLK_p)		player.SetPos(col, row);
 	if ( key_ == SDLK_g )		goal.SetPos(col, row);
 //	if ( key_ == SDLK_1 )		currentPlatform->SetTileset(ENVIRO_TILE::PLATFORMS_START);
 //	if ( key_ == SDLK_2 )		currentPlatform->SetTileset(ENVIRO_TILE::DECORATION_BEGIN);
@@ -322,7 +322,7 @@ void PSLevelEditor::Draw()
 	for ( auto &env : platforms ) env.Draw();
 	for ( auto &spawner : enemySpawners ) spawner.Draw();
 	cannon.Draw();
-	player.Draw();
+//	player.Draw();
 	goal.Draw();
 	
 

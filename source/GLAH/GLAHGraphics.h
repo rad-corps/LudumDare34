@@ -15,10 +15,11 @@ using namespace std;
 
 	//input handling
 void			AddInputListener(InputListener* inputListener_);
+void			AddGameControllerListener(GameControllerListener* listener_, int controllerID_);
 void			RemoveInputListener();
 
  bool			IsKeyDown( SDL_Keycode a_iKey );
- bool			IsGamePadButtonDown(SDL_GameControllerButton button_);
+ //bool			IsGamePadButtonDown(SDL_GameControllerButton button_);
 
  void			GetMouseLocation( int& a_iMouseX, int& a_iMouseY );
 

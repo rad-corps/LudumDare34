@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="source\game_state\PSControllerConnect.cpp" />
     <ClCompile Include="source\game_objects\EnemySpawner.cpp" />
     <ClCompile Include="source\game_objects\GLText.cpp" />
     <ClCompile Include="source\game_objects\Goal.cpp" />
@@ -43,6 +44,7 @@
     <ClCompile Include="source\tests\Databases.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="source\game_state\PSControllerConnect.h" />
     <ClInclude Include="source\GLAH\InputListener.h" />
     <ClInclude Include="source\game_objects\Camera.h" />
     <ClInclude Include="source\game_objects\EnemySpawner.h" />

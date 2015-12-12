@@ -39,7 +39,7 @@ using namespace std;
 //}
 
 OuterLoop::OuterLoop(void)
-	: updateInterval(0.0166666666666666667f)
+	: updateInterval(DELTA)
 {
 	//set the screen resolution variables in the filesettings map
 	//int hor, ver;

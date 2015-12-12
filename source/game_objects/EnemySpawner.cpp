@@ -1,13 +1,14 @@
 #include "EnemySpawner.h"
 #include "../spritesheet/UVTranslator.h"
 #include "../spritesheet/SpriteSheet.h"
+#include "../globals/consts.h"
 
 EnemySpawner::EnemySpawner(Enemy toClone_) : enemyMaster(toClone_)
 {
 	pos = toClone_.Pos();
 	timer = 2.5f;
 
-	UVTranslator trans(800,1280,16,16);
+	UVTranslator trans(TERR_SPRITESHEET_W,TERR_SPRITESHEET_H,TERR_TILE_S,TERR_TILE_S);
 	trans.GetUV(uv, 17,0);
 }
 

@@ -63,7 +63,7 @@ private:
 	
 	std::vector<EnemySpawner> enemySpawners;
 	Cannon cannon;
-	Player player;
+	//Player player;
 	Goal goal;
 	
 

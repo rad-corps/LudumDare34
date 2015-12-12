@@ -34,13 +34,13 @@ bool Platform::Active()
 
 void Platform::InitialiseGraphic()
 {
-	UVTranslator translator(48, 64, 16, 16);
+	UVTranslator trans(TERR_SPRITESHEET_W,TERR_SPRITESHEET_H,TERR_TILE_S,TERR_TILE_S);
 	
 	//get row and col based on tileType
 	int spriteSheetRow = tileType / 3;
 	int spriteSheetCol = tileType % 3;
 
-	translator.GetUV(uv, spriteSheetRow, spriteSheetCol);
+	trans.GetUV(uv, spriteSheetRow, spriteSheetCol);
 
 	//switch ( tileType )
 	//{

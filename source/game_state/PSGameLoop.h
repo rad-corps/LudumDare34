@@ -22,7 +22,7 @@ class PSGameLoop : public ProgramState, public CannonListener, public InputListe
 public:
 	//updateInterval defaults to 1/60th of a second (60FPS)
 	//GameLoop(int screenW_, int screenH_, float updateInterval = 0.0166666666666666667f);
-	PSGameLoop(int startingLevel);
+	PSGameLoop(int startingLevel, std::vector<Player*> players_);
 	//PSGameLoop();
 	~PSGameLoop(void);
 
@@ -41,13 +41,13 @@ private:
 	//float updateInterval;
 	float gameTimer;
 	
-	Player player;
+	//Player player;
 	Cannon cannon;
 	//Camera camera;
 	Goal goal;
 	int level;
 
-
+	std::vector<Player*> players;
 	std::vector<Enemy> enemies;
 	std::vector<Platform> platforms;
 	std::vector<Shell> shells;

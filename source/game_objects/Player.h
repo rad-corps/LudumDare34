@@ -13,6 +13,7 @@
 #include "../GLAH/GLAHGraphics.h"
 #include "../listeners/PlayerProjectileListener.h"
 #include "../sqlite/DatabaseManager.h"
+#include "../GLAH/InputListener.h"
 
 
 enum PLAYER_STATUS
@@ -22,16 +23,19 @@ enum PLAYER_STATUS
 	RUNNING
 };
 
-class Player : public GameObject
+class Player : public GameObject, GameControllerListener
 {
 public:
-	Player();
+	Player(int id_);
 	~Player(void);
 
 	void InitListener(PlayerProjectileListener* playerProjectileListener_);
 
 	virtual void Update(float delta_, std::vector<Platform>& platform_, std::vector<Enemy>& enemies, Goal& goal_);
 	virtual void Draw();
+
+	virtual void GamePadButtonDown(SDL_GameControllerButton button_);
+	virtual void GamePadButtonUp(SDL_GameControllerButton button_);
 
 private:
 	void ApplyVelocity(Vector2 velocity_);

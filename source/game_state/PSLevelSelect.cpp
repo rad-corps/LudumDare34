@@ -25,7 +25,7 @@ void PSLevelSelect::KeyDown(SDL_Keycode key_)
 			++selection;
 		break;
 	case SDLK_RETURN : 
-		nextProgramState = new PSGameLoop(levelMap[selection]); 
+		nextProgramState = new PSGameLoop(levelMap[selection], players); 
 		break;
 	case SDLK_ESCAPE : 
 		nextProgramState = new PSMainMenu(); 
@@ -45,9 +45,10 @@ void PSLevelSelect::GamePadButtonDown(SDL_GameControllerButton button_)
 		KeyDown ( SDLK_ESCAPE );
 }
 
-PSLevelSelect::PSLevelSelect(void) : nextProgramState(nullptr)
+PSLevelSelect::PSLevelSelect(std::vector<Player*> players_) : nextProgramState(nullptr)
 {
 	AddInputListener(this);
+	players = players_;
 
 	cout << endl << endl << "-------Select a Level---------" << endl;
 	DatabaseManager dm;

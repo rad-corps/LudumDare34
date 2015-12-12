@@ -105,6 +105,9 @@
     <ClCompile Include="source\game_objects\PlayerProjectile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="source\game_state\PSControllerConnect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\math\Collision.h">
@@ -216,6 +219,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="source\GLAH\Vector.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="source\game_state\PSControllerConnect.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

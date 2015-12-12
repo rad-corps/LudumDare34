@@ -46,7 +46,7 @@ Enemy::Enemy(const Enemy& enemy_)
 
 Enemy::Enemy(ENEMY_TYPE type_, DIRECTION initialDirection_, int col_, int row_)
 {
-	UVTranslator trans(800,1280,16,16);
+	UVTranslator trans(TERR_SPRITESHEET_W,TERR_SPRITESHEET_H,TERR_TILE_S,TERR_TILE_S);
 
 	switch (type_)
 	{
@@ -78,7 +78,7 @@ Enemy::Enemy(ENEMY_TYPE type_, DIRECTION initialDirection_, int col_, int row_)
 
 Enemy::Enemy(ENEMY_TYPE type_, DIRECTION initialDirection_, Vector2 pos_)
 {
-	UVTranslator trans(800,1280,16,16);
+	UVTranslator trans(TERR_SPRITESHEET_W,TERR_SPRITESHEET_H,TERR_TILE_S,TERR_TILE_S);
 
 	switch (type_)
 	{

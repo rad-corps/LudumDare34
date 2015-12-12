@@ -7,11 +7,11 @@
 
 
 
-Player::Player(void)
+Player::Player(int id_)
 {
 //	gfx = GLAHGraphics::Instance();
 //	inpt = GLAHInput::Instance();
-	
+	AddGameControllerListener(this, id_);
 
 	pos = Vector2(200,200);
 
@@ -116,7 +116,7 @@ void Player::HandleCollision(vector<Platform>& platform_, std::vector<Enemy>& en
 				if ( Collision::RectCollision(bottomCollider, env))
 				{
 				
-					std::cout << "bottom collision with platform" << std::endl;
+					//std::cout << "bottom collision with platform" << std::endl;
 					status = RUNNING;
 					onPlatform = true;
 					velocity.y = 0;
@@ -184,58 +184,75 @@ void Player::ApplyGravity()
 	}
 }
 
-void Player::HandleInput(float delta_)
+void Player::GamePadButtonDown(SDL_GameControllerButton button_)
 {
-	if ( IsKeyDown(SDLK_a ) || IsGamePadButtonDown( SDL_CONTROLLER_BUTTON_DPAD_LEFT ) )
+	cout << "GamePadButtonDown" << endl;
+	if ( button_ == SDL_CONTROLLER_BUTTON_DPAD_LEFT ) 
 	{
 		faceLeft = true;
-		pos.x -= maxSpeed * delta_;
+		pos.x -= maxSpeed * DELTA;
 		if ( onPlatform ) 
 			status = RUNNING;
 	}
-	else if ( IsKeyDown(SDLK_d ) || IsGamePadButtonDown( SDL_CONTROLLER_BUTTON_DPAD_RIGHT ) )
-	{
-		faceLeft = false;
-		pos.x += maxSpeed * delta_;
-		
-		if ( onPlatform ) 
-			status = RUNNING;
-	}
-	else if ( onPlatform ) 
-	{
-		status = STATIONARY;
-	}
+}
 
-	//only jump if not already jumping
-	if ( (IsKeyDown(SDLK_w ) || IsGamePadButtonDown( SDL_CONTROLLER_BUTTON_A )) && status != PLAYER_STATUS::JUMPING && !jumpHeld)
-	{
-		jumpHeld = true;
-		status = JUMPING;	
-		
-		//will only happen for one frame
-		velocity.y -= jumpForce;
-	}
+void Player::GamePadButtonUp(SDL_GameControllerButton button_)
+{
+	cout << "GamePadButtonUp" << endl;
+}
 
-	if ( !IsKeyDown(SDLK_w) )
-	{
-		jumpHeld = false;
-	}
+void Player::HandleInput(float delta_)
+{
+	//if ( IsKeyDown(SDLK_a ) || IsGamePadButtonDown( SDL_CONTROLLER_BUTTON_DPAD_LEFT ) )
+	//{
+	//	faceLeft = true;
+	//	pos.x -= maxSpeed * delta_;
+	//	if ( onPlatform ) 
+	//		status = RUNNING;
+	//}
+	//else if ( IsKeyDown(SDLK_d ) || IsGamePadButtonDown( SDL_CONTROLLER_BUTTON_DPAD_RIGHT ) )
+	//{
+	//	faceLeft = false;
+	//	pos.x += maxSpeed * delta_;
+	//	
+	//	if ( onPlatform ) 
+	//		status = RUNNING;
+	//}
+	//else if ( onPlatform ) 
+	//{
+	//	status = STATIONARY;
+	//}
 
-	if ( (IsKeyDown(SDLK_SPACE) || IsGamePadButtonDown( SDL_CONTROLLER_BUTTON_X ))&& shootHeld == false )
-	{
-		shootHeld = true;
-		cout << "SPACE PRESSED" << endl;
-		
-		if ( faceLeft )
-			playerProjectileListener->PlayerProjectileFired(pos, Vector2(-1, 0));
-		else
-			playerProjectileListener->PlayerProjectileFired(pos, Vector2(1, 0));
+	////only jump if not already jumping
+	//if ( (IsKeyDown(SDLK_w ) || IsGamePadButtonDown( SDL_CONTROLLER_BUTTON_A )) && status != PLAYER_STATUS::JUMPING && !jumpHeld)
+	//{
+	//	jumpHeld = true;
+	//	status = JUMPING;	
+	//	
+	//	//will only happen for one frame
+	//	velocity.y -= jumpForce;
+	//}
 
-	}
-	else if (!IsKeyDown(SDLK_SPACE) && !IsGamePadButtonDown( SDL_CONTROLLER_BUTTON_X ))
-	{
-		shootHeld = false;
-	}
+	//if ( !IsKeyDown(SDLK_w) )
+	//{
+	//	jumpHeld = false;
+	//}
+
+	//if ( (IsKeyDown(SDLK_SPACE) || IsGamePadButtonDown( SDL_CONTROLLER_BUTTON_X ))&& shootHeld == false )
+	//{
+	//	shootHeld = true;
+	//	cout << "SPACE PRESSED" << endl;
+	//	
+	//	if ( faceLeft )
+	//		playerProjectileListener->PlayerProjectileFired(pos, Vector2(-1, 0));
+	//	else
+	//		playerProjectileListener->PlayerProjectileFired(pos, Vector2(1, 0));
+
+	//}
+	//else if (!IsKeyDown(SDLK_SPACE) && !IsGamePadButtonDown( SDL_CONTROLLER_BUTTON_X ))
+	//{
+	//	shootHeld = false;
+	//}
 }
 
 void Player::UpdateAnimation(float delta_)
@@ -276,20 +293,17 @@ void Player::UpdateAnimation(float delta_)
 
 void Player::Update(float delta_, vector<Platform>& platform_, std::vector<Enemy>& enemies_, Goal& goal_ )
 {
-
 	prevX = pos.x;
 	prevY = pos.y;
 	
 	if (alive )	
 		HandleInput(delta_);	
 
-	
 	ApplyGravity();	
 	ApplyVelocity(velocity);	
 	playerSpeak.SetPos(pos);
 	HandleCollision(platform_, enemies_, goal_);
 	UpdateAnimation(delta_);
-
 }
 
 void Player::MoveTo(Vector2 pos_)

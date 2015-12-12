@@ -10,8 +10,8 @@ Shell::Shell(Vector2 pos_, Vector2 velocity_)
 {	
 	if ( !init ) 
 	{
-		UVTranslator translator(800,1280,16,16);
-		translator.GetUV(uv, 0, 0);
+		UVTranslator trans(TERR_SPRITESHEET_W,TERR_SPRITESHEET_H,TERR_TILE_S,TERR_TILE_S);
+		trans.GetUV(uv, 0, 0);
 		init = true;
 	}
 

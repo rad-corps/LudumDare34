@@ -3,6 +3,7 @@
 #include "PSLevelEditor.h"
 #include "PSLevelSelect.h"
 #include "PSLevelModifySelect.h"
+#include "PSControllerConnect.h"
 #include "../GLAH/GLAHGraphics.h"
 #include "../globals/consts.h"
 #include <iostream>
@@ -63,7 +64,8 @@ void PSMainMenu::KeyDown(SDL_Keycode key_)
 	{
 		if ( selection == 1 )
 		{
-			newState = new PSLevelSelect();
+			//newState = new PSLevelSelect();
+			newState = new PSControllerConnect();
 		}
 		if ( selection == 2 )
 		{

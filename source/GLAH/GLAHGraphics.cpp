@@ -29,7 +29,7 @@ float camX;
 float camY;
 
 std::map<SDL_Keycode, bool> keyDownList; //key, isDown
-std::map<SDL_GameControllerButton, bool> gcButtonDownList; //button, isDown
+//std::map<SDL_GameControllerButton, bool> gcButtonDownList; //button, isDown
 std::map<int, bool> msBtnDwn;
 
 int r, g, b;
@@ -42,10 +42,11 @@ int r, g, b;
 std::map<SDL_Texture*, GLAHEntity> spriteList;
 
 //gamepads
-SDL_GameController* gGameController = NULL;
+vector<SDL_GameController*> gGameController;
 //const int JOYSTICK_DEAD_ZONE = 8000;
 
 InputListener* inputListener;
+std::vector<GameControllerListener*> gameControllerListeners;
 
 //GLFWwindow* window;
 
@@ -76,6 +77,8 @@ double delta;
 
 int Initialise(int a_iWidth, int a_iHeight, bool a_bFullscreen, const char* a_pWindowTitle  )
 {
+	gameControllerListeners.resize(4); //max of 4 controllers.
+
     //Initialize SDL
     if( SDL_Init( SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER   ) < 0 )
     {
@@ -84,15 +87,11 @@ int Initialise(int a_iWidth, int a_iHeight, bool a_bFullscreen, const char* a_pW
 	else
     {
 		//load gamepads
-		if( SDL_NumJoysticks() < 1 )
+		for ( int i = 0; i < SDL_NumJoysticks(); ++i )
         {
-            printf( "Warning: No joysticks connected!\n" );
-        }
-        else
-        {
-            //Load joystick
-            gGameController = SDL_GameControllerOpen( 0 );
-            if( gGameController == NULL )
+            gGameController.push_back(SDL_GameControllerOpen( i ));
+			
+			if( gGameController[i] == NULL )
             {
                 printf( "Warning: Unable to open game controller! SDL Error: %s\n", SDL_GetError() );
             }
@@ -157,6 +156,12 @@ void			AddInputListener(InputListener* inputListener_)
 {
 	inputListener = inputListener_;
 }
+
+void			AddGameControllerListener(GameControllerListener* listener_, int controllerID_)
+{
+	gameControllerListeners[controllerID_] = listener_;
+}
+
 void			RemoveInputListener()
 {
 	inputListener = nullptr;
@@ -322,15 +327,20 @@ bool FrameworkUpdate()
         }
 		else if( e.type == SDL_CONTROLLERBUTTONDOWN )
         {   
-			gcButtonDownList[(SDL_GameControllerButton)e.cbutton.button] = true;
-			if ( inputListener != nullptr ) 
+			cout << e.cdevice.which << endl;
+
+			//gcButtonDownList[(SDL_GameControllerButton)e.cbutton.button] = true;
+			if ( gameControllerListeners[e.cdevice.which] != nullptr ) 
 			{
-				inputListener->GamePadButtonDown((SDL_GameControllerButton)e.cbutton.button);
+				gameControllerListeners[e.cdevice.which]->GamePadButtonDown((SDL_GameControllerButton)e.cbutton.button);
 			}
 		}
 		else if( e.type == SDL_CONTROLLERBUTTONUP )
         {   
-			gcButtonDownList[(SDL_GameControllerButton)e.cbutton.button] = false;
+			if ( gameControllerListeners[e.cdevice.which] != nullptr )
+			{
+				gameControllerListeners[e.cdevice.which]->GamePadButtonUp((SDL_GameControllerButton)e.cbutton.button);
+			}
 		}
 		else if ( e.type == SDL_KEYDOWN ) 
 		{
@@ -492,10 +502,10 @@ bool IsKeyDown( SDL_Keycode key_ )
 	return keyDownList[key_];
 }
 
-bool IsGamePadButtonDown(SDL_GameControllerButton button_)
-{
-	return gcButtonDownList[button_];
-}
+//bool IsGamePadButtonDown(SDL_GameControllerButton button_)
+//{
+//	return gcButtonDownList[button_];
+//}
 
 bool GetMouseButtonDown( int a_iMouseButtonToTest )
 {

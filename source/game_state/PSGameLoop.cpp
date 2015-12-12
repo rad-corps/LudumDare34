@@ -19,14 +19,15 @@
 #include "PSMainMenu.h"
 
 
-PSGameLoop::PSGameLoop(int level_) : newProgramState(nullptr)
+PSGameLoop::PSGameLoop(int level_, std::vector<Player*> players_) : newProgramState(nullptr)
 {
+	players = players_;
 	AddInputListener(this);
 	cout << "PSGameLoop" << endl;
 	level = level_;
 	cout << endl << "-------Playing Game: ESC to quit-----------" << endl;
 	DBLevel dbLevel;
-	dbLevel.FillData(level, platforms, player, cannon, enemySpawners, goal);
+	dbLevel.FillData(level, platforms, cannon, enemySpawners, goal);
 
 	gameTimer = 0.f;
 	
@@ -34,7 +35,11 @@ PSGameLoop::PSGameLoop(int level_) : newProgramState(nullptr)
 
 	//maximum of 3 player projectiles on screen at once
 	playerProjectiles.resize(3);
-	player.InitListener(this);
+	
+	for (int i = 0; i < players.size(); ++i)
+	{
+		players[i]->InitListener(this);
+	}
 
 	SetDrawColour(89, 141, 179);	
 }
@@ -51,7 +56,7 @@ void PSGameLoop::KeyDown(SDL_Keycode key_)
 		newProgramState = new PSMainMenu();
 
 	if ( key_ == SDLK_r ) 
-		newProgramState = new PSGameLoop(level);
+		newProgramState = new PSGameLoop(level, players);
 }
 
 void PSGameLoop::GamePadButtonDown(SDL_GameControllerButton button_)
@@ -62,7 +67,11 @@ void PSGameLoop::GamePadButtonDown(SDL_GameControllerButton button_)
 ProgramState* PSGameLoop::Update(float delta_)
 {
 	//update player
-	player.Update(delta_, platforms, enemies, goal);
+	
+	for (auto &player : players )
+	{
+		player->Update(delta_, platforms, enemies, goal);
+	}
 
 	//update Camera
 	//camera.pos = Vector2(SCREEN_W * 0.5f, SCREEN_H * 0.5f);
@@ -93,16 +102,14 @@ ProgramState* PSGameLoop::Update(float delta_)
 	//update goal
 	goal.Update(delta_);
 
-
-
 	return newProgramState;
 }
 
 //Draw Game
 void PSGameLoop::Draw()
 {
-
-	player.Draw();
+	for ( auto &player : players )
+		player->Draw();
 
 	for ( auto &projectiles : playerProjectiles)
 		projectiles.Draw();
@@ -119,8 +126,7 @@ void PSGameLoop::Draw()
 	for ( auto &es : enemySpawners )
 		es.Draw();
 
-	goal.Draw();	
-		
+	goal.Draw();			
 }
 
 void PSGameLoop::ShotFired(Vector2 pos_, Vector2 velocity_)
