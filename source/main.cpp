@@ -4,8 +4,10 @@
 //The Original resolution of Space Invaders was 224 x 260 
 //For comparison the Nintendo DS has a resolution of 292 x 192
 //We're going to render this out at three times the original resolution (because we can)
-const int iScreenWidth = 1024;
-const int iScreenHeight = 768;
+//const int iScreenWidth = 1024;
+//const int iScreenHeight = 768;
+
+//trivial change
 
 //update at 60-FPS
 const float UPDATE_INTERVAL = 0.0166666666666666667f;
