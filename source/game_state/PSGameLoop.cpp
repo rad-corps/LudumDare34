@@ -47,8 +47,6 @@ PSGameLoop::PSGameLoop(int level_, std::vector<Player*> players_) : newProgramSt
 
 PSGameLoop::~PSGameLoop(void)
 {
-	//SetBGColour( 0x2C, 0x2C, 0x2C );
-
 	//kill the players
 	for (auto &player : players)
 	{
@@ -74,8 +72,7 @@ void PSGameLoop::GamePadButtonDown(SDL_GameControllerButton button_)
 
 ProgramState* PSGameLoop::Update(float delta_)
 {
-	//update player
-	
+	//update player	
 	for (auto &player : players )
 		player->Update(delta_, platforms, playerProjectiles);
 
@@ -83,15 +80,8 @@ ProgramState* PSGameLoop::Update(float delta_)
 	for ( auto &env : platforms )
 		env.Update(delta_, playerProjectiles);		
 
-	//update shells
-	//for (auto &shell : shells )
-	//	shell.Update(delta_);
-
 	for ( auto &projectiles : playerProjectiles)
 		projectiles.Update(delta_);
-
-	//update goal
-	goal.Update(delta_);
 
 	return newProgramState;
 }
@@ -106,29 +96,9 @@ void PSGameLoop::Draw()
 		env.Draw();		
 
 	for ( auto &player : players )
-		player->Draw();
-
-	//for (auto &shell : shells )
-	//	shell.Draw();	
-
-	goal.Draw();			
+		player->Draw();			
 }
 
-//void PSGameLoop::ShotFired(Vector2 pos_, Vector2 velocity_)
-//{
-//	//find an inactive shell
-//	for ( auto &shell : shells )
-//	{
-//		if ( !shell.IsActive() )
-//		{
-//			shell.Shoot(pos_, velocity_);
-//			return;
-//		}
-//	}
-//
-//	//if we got this far, than we need to push back a new one	
-//	shells.push_back(Shell(pos_, velocity_));
-//}
 
 void PSGameLoop::PlayerProjectileFired(Vector2 pos_, Vector2 velocity_)
 {

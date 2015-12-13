@@ -42,12 +42,6 @@
     <ClCompile Include="source\spritesheet\UVTranslator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\game_objects\Cannon.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="source\game_objects\Enemy.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="source\sqlite\sqlite3.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -87,12 +81,6 @@
     <ClCompile Include="source\game_objects\GLText.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\game_objects\EnemySpawner.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="source\game_objects\Goal.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="source\game_objects\Platform.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -125,13 +113,7 @@
     <ClInclude Include="source\spritesheet\UVTranslator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\game_objects\Cannon.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="source\listeners\CannonListener.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="source\game_objects\Enemy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="source\sqlite\sqlite3.h">
@@ -174,12 +156,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="source\globals\consts.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="source\game_objects\EnemySpawner.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="source\game_objects\Goal.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="source\game_objects\Platform.h">

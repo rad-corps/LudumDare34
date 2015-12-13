@@ -5,11 +5,8 @@
 #include <vector>
 #include <memory>
 #include "../game_objects/Platform.h"
-#include "../game_objects/Cannon.h"
 #include "../game_objects/Player.h"
 #include "../game_objects/GLText.h"
-#include "../game_objects/EnemySpawner.h"
-#include "../game_objects/Goal.h"
 
 enum TILE_CATEGORY
 {
@@ -62,9 +59,9 @@ private:
 	std::vector<Platform> platforms;	
 	
 //	std::vector<EnemySpawner> enemySpawners;
-	Cannon cannon;
+//	Cannon cannon;
 	//Player player;
-	Goal goal;
+//	Goal goal;
 	
 
 	bool inputName;

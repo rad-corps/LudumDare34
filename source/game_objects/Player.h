@@ -2,8 +2,6 @@
 
 #include "GameObject.h"
 #include "Platform.h"
-#include "Enemy.h"
-#include "Goal.h"
 #include "../GLAH/Vector.h"
 #include "../math/Rect.h"
 #include <vector>

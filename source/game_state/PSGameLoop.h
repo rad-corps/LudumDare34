@@ -6,11 +6,8 @@
 #include "../GLAH/InputListener.h"
 #include "../game_objects/Platform.h"
 #include "../game_objects/Player.h"
-#include "../game_objects/Cannon.h"
-//#include "../game_objects/Shell.h"
-//#include "../game_objects/Enemy.h"
-#include "../game_objects/EnemySpawner.h"
-#include "../game_objects/Goal.h"
+//#include "../game_objects/EnemySpawner.h"
+//#include "../game_objects/Goal.h"
 #include "../game_objects/Camera.h"
 #include "../game_objects/PlayerProjectile.h"
 #include "../listeners/CannonListener.h"
@@ -42,9 +39,9 @@ private:
 	float gameTimer;
 	
 	//Player player;
-	Cannon cannon;
+	//Cannon cannon;
 	//Camera camera;
-	Goal goal;
+	//Goal goal;
 	int level;
 
 	std::vector<Player*> players;

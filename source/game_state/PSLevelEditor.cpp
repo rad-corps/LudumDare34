@@ -200,9 +200,9 @@ void PSLevelEditor::KeyDown(SDL_Keycode key_)
 	if( key_ == SDLK_LEFT)		--col;
 	if( key_ == SDLK_RIGHT) 	++col;
 	if ( key_ == SDLK_SPACE )	SetPlatformTile();
-	if ( key_ == SDLK_o )		cannon.SetPos(col, row);
+//	if ( key_ == SDLK_o )		cannon.SetPos(col, row);
 //	if ( key_ == SDLK_p)		player.SetPos(col, row);
-	if ( key_ == SDLK_g )		goal.SetPos(col, row);
+//	if ( key_ == SDLK_g )		goal.SetPos(col, row);
 //	if ( key_ == SDLK_1 )		currentPlatform->SetTileset(ENVIRO_TILE::PLATFORMS_START);
 //	if ( key_ == SDLK_2 )		currentPlatform->SetTileset(ENVIRO_TILE::DECORATION_BEGIN);
 	if ( key_ == SDLK_i )		showInstructions = !showInstructions;
@@ -323,7 +323,7 @@ void PSLevelEditor::Draw()
 	//for ( auto &spawner : enemySpawners ) spawner.Draw();
 	//cannon.Draw();
 //	player.Draw();
-	goal.Draw();
+//	goal.Draw();
 	
 
 	currentPlatform->x = pos.x;
