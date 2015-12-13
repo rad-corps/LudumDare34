@@ -13,18 +13,15 @@ DBLevel::~DBLevel(void)
 {
 }
 
-void DBLevel::SaveData(std::vector<Platform>& platform_, Cannon& cannon_, std::string levelName_, std::vector<EnemySpawner>& spawners_, Goal& goal_)
+void DBLevel::SaveData(std::vector<Platform>& platform_, std::string levelName_)
 {
 	//save the level table first. record the ID
 	char * error = "";
 	std::stringstream levelValues;
-	levelValues << " " << cannon_.Col() 
-		<< ", " << cannon_.Row() 
-		<< ", '" << levelName_ 
-		<< "', " << goal_.Col() 
-		<< ", " << goal_.Row() << " ";
+	levelValues << " '" << levelName_ 
+		<< "' ";
 
-	dm.Insert("./resources/db/dontpanic.db", "tbl_level", " cannon_tile_x, cannon_tile_y, name, goal_tile_x, goal_tile_y ", levelValues.str(), error);
+	dm.Insert("./resources/db/dontpanic.db", "tbl_level", " name ", levelValues.str(), error);
 
 	int id = dm.GetLastInsertedRowID();
 
@@ -36,18 +33,18 @@ void DBLevel::SaveData(std::vector<Platform>& platform_, Cannon& cannon_, std::s
 		dm.Insert("./resources/db/dontpanic.db", "tbl_tile", " level_id, row, col, tile_type ", tileValues.str(), error);
 	}
 
-	//save each spawner tile
-	for ( auto& spawner : spawners_ )
-	{
-		std::stringstream spawnerValues;	
-		spawnerValues << " " << id << ", " << spawner.Row() << ", " << spawner.Col() << ", 0, 3.0 ";
-		dm.Insert("./resources/db/dontpanic.db", "tbl_spawners", " level_id, row, col, type, freq ", spawnerValues.str(), error);
-	}
+	////save each spawner tile
+	//for ( auto& spawner : spawners_ )
+	//{
+	//	std::stringstream spawnerValues;	
+	//	spawnerValues << " " << id << ", " << spawner.Row() << ", " << spawner.Col() << ", 0, 3.0 ";
+	//	dm.Insert("./resources/db/dontpanic.db", "tbl_spawners", " level_id, row, col, type, freq ", spawnerValues.str(), error);
+	//}
 
 	
 }
 
-void DBLevel::FillData(int level_, std::vector<Platform>& platform_, Cannon& cannon_, std::vector<EnemySpawner>& spawners_, Goal& goal_)
+void DBLevel::FillData(int level_, std::vector<Platform>& platform_)
 {
 	char * error = "";
 	
@@ -64,20 +61,20 @@ void DBLevel::FillData(int level_, std::vector<Platform>& platform_, Cannon& can
 		}
 	}
 
-	//get enemy spawners
-	{
-		std::stringstream ss;
-		ss << "level_id=" << level_;		
-		dm.Select("./resources/db/dontpanic.db", "tbl_spawners", "*",ss.str(), "", error);
-	
-		for (int i = 0; i < dm.Rows(); ++i)
-		{
-			ENEMY_TYPE et = (ENEMY_TYPE)dm.GetValueInt(i, "type");
-			Enemy enemy(et, DIRECTION::DIR_LEFT, dm.GetValueInt(i,"col"), dm.GetValueInt(i,"row"));
-			EnemySpawner spawner(enemy);			
-			spawners_.push_back(spawner);
-		}
-	}
+	////get enemy spawners
+	//{
+	//	std::stringstream ss;
+	//	ss << "level_id=" << level_;		
+	//	dm.Select("./resources/db/dontpanic.db", "tbl_spawners", "*",ss.str(), "", error);
+	//
+	//	for (int i = 0; i < dm.Rows(); ++i)
+	//	{
+	//		ENEMY_TYPE et = (ENEMY_TYPE)dm.GetValueInt(i, "type");
+	//		Enemy enemy(et, DIRECTION::DIR_LEFT, dm.GetValueInt(i,"col"), dm.GetValueInt(i,"row"));
+	//		EnemySpawner spawner(enemy);			
+	//		spawners_.push_back(spawner);
+	//	}
+	//}
 
 	//get level specific (player, cannon)
 	{
@@ -87,7 +84,7 @@ void DBLevel::FillData(int level_, std::vector<Platform>& platform_, Cannon& can
 		dm.Select("./resources/db/dontpanic.db", "tbl_level", "*", ss.str(), "", error);
 
 //		player_.SetPos(dm.GetValueInt(0, "player_tile_x"), dm.GetValueInt(0, "player_tile_y"));
-		cannon_.SetPos(dm.GetValueInt(0, "cannon_tile_x"), dm.GetValueInt(0, "cannon_tile_y"));
-		goal_.SetPos(dm.GetValueInt(0, "goal_tile_x"), dm.GetValueInt(0, "goal_tile_y"));
+//		cannon_.SetPos(dm.GetValueInt(0, "cannon_tile_x"), dm.GetValueInt(0, "cannon_tile_y"));
+//		goal_.SetPos(dm.GetValueInt(0, "goal_tile_x"), dm.GetValueInt(0, "goal_tile_y"));
 	}
 }

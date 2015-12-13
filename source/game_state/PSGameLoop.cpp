@@ -27,14 +27,14 @@ PSGameLoop::PSGameLoop(int level_, std::vector<Player*> players_) : newProgramSt
 	level = level_;
 	cout << endl << "-------Playing Game: ESC to quit-----------" << endl;
 	DBLevel dbLevel;
-	dbLevel.FillData(level, platforms, cannon, enemySpawners, goal);
+	dbLevel.FillData(level, platforms);
 
 	gameTimer = 0.f;
 	
-	cannon.RegisterCannonListener(this);	
+	//cannon.RegisterCannonListener(this);	
 
-	//maximum of 3 player projectiles on screen at once
-	playerProjectiles.resize(3);
+	//maximum of 20 player projectiles on screen at once
+	playerProjectiles.resize(20);
 	
 	for (int i = 0; i < players.size(); ++i)
 	{
@@ -77,32 +77,15 @@ ProgramState* PSGameLoop::Update(float delta_)
 	//update player
 	
 	for (auto &player : players )
-	{
-		player->Update(delta_, platforms, enemies, goal);
-	}
-
-	//update Camera
-	//camera.pos = Vector2(SCREEN_W * 0.5f, SCREEN_H * 0.5f);
-	//MoveCamera(camera.pos.x, camera.pos.y);
-	
-	//update cannon
-	//cannon.Update(delta_);
+		player->Update(delta_, platforms, playerProjectiles);
 
 	//update platforms
 	for ( auto &env : platforms )
-		env.Update(delta_, shells);		
+		env.Update(delta_, playerProjectiles);		
 
-	//update enemies
-	for ( auto &enemy : enemies )
-		enemy.Update(delta_, platforms, shells, playerProjectiles);
-
-	//update the spawners
-	for ( auto &spawner : enemySpawners )
-		spawner.Update(delta_, enemies);
-	
 	//update shells
-	for (auto &shell : shells )
-		shell.Update(delta_);
+	//for (auto &shell : shells )
+	//	shell.Update(delta_);
 
 	for ( auto &projectiles : playerProjectiles)
 		projectiles.Update(delta_);
@@ -119,39 +102,33 @@ void PSGameLoop::Draw()
 	for ( auto &projectiles : playerProjectiles)
 		projectiles.Draw();
 
-	for ( auto &enemy : enemies )
-		enemy.Draw();
-
 	for (auto &env : platforms )
 		env.Draw();		
 
 	for ( auto &player : players )
 		player->Draw();
 
-	for (auto &shell : shells )
-		shell.Draw();	
-
-	for ( auto &es : enemySpawners )
-		es.Draw();
+	//for (auto &shell : shells )
+	//	shell.Draw();	
 
 	goal.Draw();			
 }
 
-void PSGameLoop::ShotFired(Vector2 pos_, Vector2 velocity_)
-{
-	//find an inactive shell
-	for ( auto &shell : shells )
-	{
-		if ( !shell.IsActive() )
-		{
-			shell.Shoot(pos_, velocity_);
-			return;
-		}
-	}
-
-	//if we got this far, than we need to push back a new one	
-	shells.push_back(Shell(pos_, velocity_));
-}
+//void PSGameLoop::ShotFired(Vector2 pos_, Vector2 velocity_)
+//{
+//	//find an inactive shell
+//	for ( auto &shell : shells )
+//	{
+//		if ( !shell.IsActive() )
+//		{
+//			shell.Shoot(pos_, velocity_);
+//			return;
+//		}
+//	}
+//
+//	//if we got this far, than we need to push back a new one	
+//	shells.push_back(Shell(pos_, velocity_));
+//}
 
 void PSGameLoop::PlayerProjectileFired(Vector2 pos_, Vector2 velocity_)
 {

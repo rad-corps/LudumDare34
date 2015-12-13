@@ -25,7 +25,6 @@
     <ClCompile Include="source\game_state\OuterLoop.cpp" />
     <ClCompile Include="source\data\DBLevel.cpp" />
     <ClCompile Include="source\game_objects\Enemy.cpp" />
-    <ClCompile Include="source\game_objects\Shell.cpp" />
     <ClCompile Include="source\game_objects\Cannon.cpp" />
     <ClCompile Include="source\game_objects\Platform.cpp" />
     <ClCompile Include="source\game_objects\GameObject.cpp" />
@@ -61,7 +60,6 @@
     <ClInclude Include="source\game_state\OuterLoop.h" />
     <ClInclude Include="source\data\DBLevel.h" />
     <ClInclude Include="source\game_objects\Enemy.h" />
-    <ClInclude Include="source\game_objects\Shell.h" />
     <ClInclude Include="source\game_objects\Cannon.h" />
     <ClInclude Include="source\GLAH\GLAHColour.h" />
     <ClInclude Include="source\GLAH\GLAHGraphics.h" />

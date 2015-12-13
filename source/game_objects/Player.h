@@ -32,7 +32,7 @@ public:
 
 	void InitListener(PlayerProjectileListener* playerProjectileListener_);
 
-	virtual void Update(float delta_, std::vector<Platform>& platform_, std::vector<Enemy>& enemies, Goal& goal_);
+	virtual void Update(float delta_, std::vector<Platform>& platform_, std::vector<PlayerProjectile>& projectiles_);
 	virtual void Draw();
 
 	virtual void GamePadButtonDown(SDL_GameControllerButton button_);
@@ -43,7 +43,7 @@ private:
 	void MoveTo(Vector2 pos_);
 	void UndoX();
 	void UndoY();
-	void HandleCollision(std::vector<Platform>& platform_, std::vector<Enemy>& enemies, Goal& goal_);
+	void HandleCollision(std::vector<Platform>& platform_, std::vector<PlayerProjectile>& projectiles_);
 	void HandleInput(float delta_);
 	void UpdateAnimation(float delta_);
 	void ApplyGravity();

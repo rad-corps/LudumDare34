@@ -45,9 +45,6 @@
     <ClCompile Include="source\game_objects\Cannon.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\game_objects\Shell.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="source\game_objects\Enemy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -129,9 +126,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="source\game_objects\Cannon.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="source\game_objects\Shell.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="source\listeners\CannonListener.h">

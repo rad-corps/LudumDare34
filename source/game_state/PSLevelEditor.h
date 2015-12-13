@@ -36,7 +36,7 @@ public:
 	virtual void GamePadButtonDown(SDL_GameControllerButton button_){}
 
 	static bool FindMatchingPlatform(Platform& env_);
-	static bool FindMatchingEnemySpawner(EnemySpawner& env_);
+	//static bool FindMatchingEnemySpawner(EnemySpawner& env_);
 
 private:
 	void HandleNameInput(SDL_Keycode key_);
@@ -61,7 +61,7 @@ private:
 
 	std::vector<Platform> platforms;	
 	
-	std::vector<EnemySpawner> enemySpawners;
+//	std::vector<EnemySpawner> enemySpawners;
 	Cannon cannon;
 	//Player player;
 	Goal goal;

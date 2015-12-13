@@ -96,7 +96,7 @@ PSLevelEditor::PSLevelEditor(int levelID_)
 {
 	
 	DBLevel dbLevel;
-	dbLevel.FillData(levelID_, platforms, cannon, enemySpawners, goal);
+	dbLevel.FillData(levelID_, platforms);
 	Init();
 	
 }
@@ -124,12 +124,12 @@ bool PSLevelEditor::FindMatchingPlatform(Platform& env_)
 	return false;
 }
 
-bool PSLevelEditor::FindMatchingEnemySpawner(EnemySpawner& spawner_)
-{
-	if ( spawner_.Col() == col && spawner_.Row() == row )
-		return true;
-	return false;
-}
+//bool PSLevelEditor::FindMatchingEnemySpawner(EnemySpawner& spawner_)
+//{
+//	if ( spawner_.Col() == col && spawner_.Row() == row )
+//		return true;
+//	return false;
+//}
 
 void PSLevelEditor::RemovePlatformTile()
 {
@@ -162,7 +162,7 @@ void PSLevelEditor::HandleNameInput(SDL_Keycode key_)
 		cout << "...Saving Level..." << endl;
 		saving = false;
 		DBLevel db;
-		db.SaveData(platforms, cannon, levelName, enemySpawners, goal);
+		db.SaveData(platforms, levelName);
 		inputName = false;
 		promptText.SetText(levelName + " Saved");
 	}
@@ -216,22 +216,22 @@ void PSLevelEditor::KeyDown(SDL_Keycode key_)
 //		currentPlatform->IncrementTileType();		
 //	}	
 	
-	//drop an enemy spawner
-	if ( key_ == SDLK_e )
-	{
-		//find enemySpawner tile at this space.
-		auto it = find_if(enemySpawners.begin(), enemySpawners.end(), FindMatchingEnemySpawner);
-		
-		//if found, we want to set this platform to the next tile
-		if ( it != enemySpawners.end() )
-		{
-			it = enemySpawners.erase(it);
-		}
-		else //if no tiles found, add a new one. 
-		{
-			enemySpawners.push_back(EnemySpawner(Enemy(ENEMY_TYPE::SKELETON, DIRECTION::DIR_LEFT, col, row)));
-		}
-	}
+	////drop an enemy spawner
+	//if ( key_ == SDLK_e )
+	//{
+	//	//find enemySpawner tile at this space.
+	//	auto it = find_if(enemySpawners.begin(), enemySpawners.end(), FindMatchingEnemySpawner);
+	//	
+	//	//if found, we want to set this platform to the next tile
+	//	if ( it != enemySpawners.end() )
+	//	{
+	//		it = enemySpawners.erase(it);
+	//	}
+	//	else //if no tiles found, add a new one. 
+	//	{
+	//		enemySpawners.push_back(EnemySpawner(Enemy(ENEMY_TYPE::SKELETON, DIRECTION::DIR_LEFT, col, row)));
+	//	}
+	//}
 
 	if ( key_ == SDLK_ESCAPE )
 	{
@@ -320,8 +320,8 @@ ProgramState* PSLevelEditor::Update(float delta_)
 void PSLevelEditor::Draw()
 {
 	for ( auto &env : platforms ) env.Draw();
-	for ( auto &spawner : enemySpawners ) spawner.Draw();
-	cannon.Draw();
+	//for ( auto &spawner : enemySpawners ) spawner.Draw();
+	//cannon.Draw();
 //	player.Draw();
 	goal.Draw();
 	

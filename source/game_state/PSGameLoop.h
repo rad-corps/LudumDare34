@@ -7,8 +7,8 @@
 #include "../game_objects/Platform.h"
 #include "../game_objects/Player.h"
 #include "../game_objects/Cannon.h"
-#include "../game_objects/Shell.h"
-#include "../game_objects/Enemy.h"
+//#include "../game_objects/Shell.h"
+//#include "../game_objects/Enemy.h"
 #include "../game_objects/EnemySpawner.h"
 #include "../game_objects/Goal.h"
 #include "../game_objects/Camera.h"
@@ -17,7 +17,7 @@
 #include "../listeners/PlayerProjectileListener.h"
 #include "../GLAH/Vector.h"
 
-class PSGameLoop : public ProgramState, public CannonListener, public InputListener, public PlayerProjectileListener
+class PSGameLoop : public ProgramState,/*public CannonListener, */ public InputListener, public PlayerProjectileListener
 {
 public:
 	//updateInterval defaults to 1/60th of a second (60FPS)
@@ -32,7 +32,7 @@ public:
 	virtual ProgramState* Update(float delta_);
 	void Draw();
 
-	virtual void ShotFired(Vector2 pos_, Vector2 velocity_);
+	//virtual void ShotFired(Vector2 pos_, Vector2 velocity_);
 	virtual void PlayerProjectileFired(Vector2 pos_, Vector2 velocity_);
 	virtual void KeyDown(SDL_Keycode key_);
 	virtual void GamePadButtonDown(SDL_GameControllerButton button_);
@@ -48,10 +48,10 @@ private:
 	int level;
 
 	std::vector<Player*> players;
-	std::vector<Enemy> enemies;
+	//std::vector<Enemy> enemies;
 	std::vector<Platform> platforms;
-	std::vector<Shell> shells;
-	std::vector<EnemySpawner> enemySpawners;
+	//std::vector<Shell> shells;
+	//std::vector<EnemySpawner> enemySpawners;
 	std::vector<PlayerProjectile> playerProjectiles;
 
 	ProgramState* newProgramState;

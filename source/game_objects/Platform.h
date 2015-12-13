@@ -3,7 +3,7 @@
 #include "../math/Rect.h"
 #include "../GLAH/GLAHGraphics.h"
 #include "../GLAH/Vector.h"
-#include "Shell.h"
+#include "PlayerProjectile.h"
 #include <vector>
 
 //enum ENVIRO_TILE
@@ -50,7 +50,7 @@ public:
 	~Platform(void);
 
 	void Draw(float alpha_ = 1.0f);
-	void Update(float delta_, std::vector<Shell>& shells_);
+	void Update(float delta_, std::vector<PlayerProjectile>& playerProjectiles_);
 
 	void Fall();
 	bool Active();

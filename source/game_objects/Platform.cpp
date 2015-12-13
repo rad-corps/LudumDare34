@@ -171,7 +171,7 @@ void Platform::Draw(float alpha_)
 #endif
 }
 
-void Platform::Update(float delta_, std::vector<Shell>& shells_)
+void Platform::Update(float delta_, std::vector<PlayerProjectile>& playerProjectiles_)
 {
 	//if ( !active ) 
 	//	return;

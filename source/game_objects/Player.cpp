@@ -91,7 +91,7 @@ void Player::UpdateColliders()
 	hitCollider.y = pos.y;
 }
 
-void Player::HandleCollision(vector<Platform>& platform_, std::vector<Enemy>& enemies_, Goal& goal_)
+void Player::HandleCollision(vector<Platform>& platform_, std::vector<PlayerProjectile>& projectiles_)
 {
 	//bool tempOnPlatform = false;
 	onPlatform = false;
@@ -136,31 +136,11 @@ void Player::HandleCollision(vector<Platform>& platform_, std::vector<Enemy>& en
 			}
 
 		}
-		//}
 	}
-
-	//if (tempOnPlatform)
-	//	onPlatform = tempOnPlatform;
 
 	if ( !onPlatform )
 	{
 		status = JUMPING;
-	}
-
-	//check player enemy collision
-	for ( auto &enemy : enemies_ )
-		if ( Collision::RectCollision(hitCollider, enemy.GetRect()))
-			if ( enemy.IsActive() )
-			{
-				alive = false;
-				playerSpeak.SetText("R TO RESTART");
-			}
-
-	//check player goal collision
-	if ( Collision::RectCollision(hitCollider, goal_.GetRect()))
-	{
-		playerSpeak.SetText("WOO! ");
-		
 	}
 }
 
@@ -252,9 +232,9 @@ void Player::HandleInput(float delta_)
 		cout << "SPACE PRESSED" << endl;
 		
 		if ( faceLeft )
-			playerProjectileListener->PlayerProjectileFired(pos, Vector2(-1, 0));
+			playerProjectileListener->PlayerProjectileFired(pos, Vector2(-0.2, 0));
 		else
-			playerProjectileListener->PlayerProjectileFired(pos, Vector2(1, 0));
+			playerProjectileListener->PlayerProjectileFired(pos, Vector2(0.2, 0));
 
 	}
 	else if (!buttonDown[ SDL_CONTROLLER_BUTTON_X ])
@@ -299,7 +279,7 @@ void Player::UpdateAnimation(float delta_)
 
 }
 
-void Player::Update(float delta_, vector<Platform>& platform_, std::vector<Enemy>& enemies_, Goal& goal_ )
+void Player::Update(float delta_, vector<Platform>& platform_, std::vector<PlayerProjectile>& projectiles_ )
 {
 	prevX = pos.x;
 	prevY = pos.y;
@@ -310,7 +290,7 @@ void Player::Update(float delta_, vector<Platform>& platform_, std::vector<Enemy
 	ApplyGravity();	
 	ApplyVelocity(velocity);	
 	playerSpeak.SetPos(pos);
-	HandleCollision(platform_, enemies_, goal_);
+	HandleCollision(platform_, projectiles_);
 	UpdateAnimation(delta_);
 }
 
