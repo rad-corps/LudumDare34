@@ -49,6 +49,11 @@ PlayerProjectile::Draw()
 		SetSpriteUVCoordinates(SpriteSheet::Sprite(), uv);
 		MoveSprite(SpriteSheet::Sprite(), pos.x, pos.y);
 		DrawSprite(SpriteSheet::Sprite());
+
+#ifdef SHOW_COLLIDERS
+		DrawRect(GetRect());
+#endif
+
 	}
 }
 

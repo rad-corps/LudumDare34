@@ -29,8 +29,8 @@ Player::Player(int id_)
 	leftCollider.h = COLLIDER_SZ;
 	rightCollider.w = COLLIDER_SZ;
 	rightCollider.h = COLLIDER_SZ;
-	hitCollider.w = COLLIDER_SZ;
-	hitCollider.h = COLLIDER_SZ;
+	hitCollider.w = PLAYER_S;
+	hitCollider.h = PLAYER_S;
 
 	UpdateColliders();
 
@@ -135,6 +135,17 @@ void Player::HandleCollision(vector<Platform>& platform_, std::vector<PlayerProj
 				}
 			}
 
+		}
+	}
+
+	for ( auto &projectile : projectiles_ )
+	{
+		if (projectile.IsActive())
+		{
+			if ( Collision::RectCollision(topCollider, projectile.GetRect() ) )
+			{
+				cout << "Projectile Collided with player " << playerNum << endl;
+			}
 		}
 	}
 
@@ -297,11 +308,8 @@ void Player::Update(float delta_, vector<Platform>& platform_, std::vector<Playe
 void Player::MoveTo(Vector2 pos_)
 {
 	pos = pos_;
-
 	UpdateColliders();
 }
-
-
 
 void Player::ApplyVelocity(Vector2 velocity_)
 {
@@ -341,6 +349,7 @@ void Player::Draw()
 	DrawRect(leftCollider);
 	DrawRect(rightCollider);
 	DrawRect(topCollider);
+	DrawRect(hitCollider);	
 #endif
 
 	playerSpeak.Draw();

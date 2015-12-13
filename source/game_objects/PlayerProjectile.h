@@ -16,8 +16,10 @@ public:
 	void Update(float delta_);
 
 private:
+	
 	Vector2 velocity;
 	//float* sprite;
 	static float uv[4];
 	static bool init;
+	SDL_Rect collider;
 };
