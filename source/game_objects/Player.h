@@ -87,8 +87,13 @@ private:
 	float maxSpeed;
 	float jumpForce;
 	float accelleration;
+	float terminalVelocity;
 
 	std::map<SDL_GameControllerButton, bool> buttonDown;
+
+	int playerNum;
+	GLText guiText;
+	int kills;
 
 };
 

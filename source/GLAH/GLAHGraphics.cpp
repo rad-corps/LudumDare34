@@ -75,6 +75,28 @@ std::chrono::time_point<high_resolution_clock> timeEnd;
 
 double delta;
 
+void LoadAllGamePads()
+{
+	gGameController.clear();
+
+	//load gamepads
+	for ( int i = 0; i < SDL_NumJoysticks(); ++i )
+    {
+        gGameController.push_back(SDL_GameControllerOpen( i ));
+			
+		if( gGameController[i] == NULL )
+        {
+            printf( "Warning: Unable to open game controller! SDL Error: %s\n", SDL_GetError() );
+        }
+    }
+}
+
+
+void ClearGamePads()
+{
+	gGameController.clear();
+}
+
 int Initialise(int a_iWidth, int a_iHeight, bool a_bFullscreen, const char* a_pWindowTitle  )
 {
 	gameControllerListeners.resize(4); //max of 4 controllers.
@@ -86,16 +108,7 @@ int Initialise(int a_iWidth, int a_iHeight, bool a_bFullscreen, const char* a_pW
     }
 	else
     {
-		//load gamepads
-		for ( int i = 0; i < SDL_NumJoysticks(); ++i )
-        {
-            gGameController.push_back(SDL_GameControllerOpen( i ));
-			
-			if( gGameController[i] == NULL )
-            {
-                printf( "Warning: Unable to open game controller! SDL Error: %s\n", SDL_GetError() );
-            }
-        }
+
 
         //Create window
         window = SDL_CreateWindow( "Tradie Wars", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, a_iWidth, a_iHeight, SDL_WINDOW_SHOWN );
@@ -248,13 +261,13 @@ void DrawSprite(SDL_Texture* sprite_, bool xFlip_, float alpha_, bool effectedBy
 	
 	//destination draw point needs to be -(int)entity.size.x/2 - (int)entity.size.y/2
 	
-	if ( effectedByCamera_ )
-	{
-		xpos = (int)entity.position.x - (int)camX + (int)(SCREEN_W * 0.5f) - (int)(entity.size.x * 0.5f);
-		ypos = (int)(SCREEN_H * 0.5f) - (int)entity.position.y + (int)camY - (int)(entity.size.y * 0.5f);
-	}
-	else
-	{
+	//if ( effectedByCamera_ )
+	//{
+	//	xpos = (int)entity.position.x - (int)camX + (int)(SCREEN_W * 0.5f) - (int)(entity.size.x * 0.5f);
+	//	ypos = (int)(SCREEN_H * 0.5f) - (int)entity.position.y + (int)camY - (int)(entity.size.y * 0.5f);
+	//}
+	//else
+	//{
 		////draw from centre
 		//xpos = (int)entity.position.x - (int)(entity.size.x * 0.5f);
 		//ypos = (int)entity.position.y - (int)(entity.size.y * 0.5f);
@@ -262,7 +275,7 @@ void DrawSprite(SDL_Texture* sprite_, bool xFlip_, float alpha_, bool effectedBy
 		//draw from top left
 		xpos = (int)entity.position.x;
 		ypos = (int)entity.position.y;
-	}
+	//}
 
 	SDL_Rect dst = {xpos, ypos, (int)entity.size.x, (int)entity.size.y };
 
@@ -325,6 +338,10 @@ bool FrameworkUpdate()
         {
             quit = true;
         }
+		if (e.type == SDL_JOYDEVICEREMOVED )
+		{
+			cout << "SDL_JOYDEVICEREMOVED" << endl;
+		}
 		else if( e.type == SDL_CONTROLLERBUTTONDOWN )
         {   
 			cout << e.cdevice.which << endl;

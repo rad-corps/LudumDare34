@@ -27,6 +27,8 @@ PSControllerConnect::~PSControllerConnect(void)
 
 void PSControllerConnect::KeyDown(SDL_Keycode key_)
 {
+	LoadAllGamePads();
+
 	//create a player for each control detected. 
 	for ( int i = 0; i < SDL_NumJoysticks(); ++i ) 
 	{
@@ -35,6 +37,7 @@ void PSControllerConnect::KeyDown(SDL_Keycode key_)
 	
 	//move onto the level select screen
 	newState = new PSLevelSelect(players);
+
 }
 
 void PSControllerConnect::GamePadButtonDown(SDL_GameControllerButton button_) 

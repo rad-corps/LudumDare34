@@ -75,6 +75,9 @@ void			RemoveInputListener();
 
 	bool			FrameworkUpdate();
 
+	void			LoadAllGamePads();
+	void			ClearGamePads();
+
 	int				Initialise( int a_iWidth, int a_iHeight, bool a_bFullscreen = false, const char* a_pWindowTitle = nullptr );
 
 	void			Shutdown();

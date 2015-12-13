@@ -8,10 +8,12 @@
 
 
 Player::Player(int id_)
+	: kills(0)
 {
 //	gfx = GLAHGraphics::Instance();
 //	inpt = GLAHInput::Instance();
 	AddGameControllerListener(this, id_);
+	playerNum = id_;
 
 	pos = Vector2(200,200);
 
@@ -30,19 +32,18 @@ Player::Player(int id_)
 	hitCollider.w = COLLIDER_SZ;
 	hitCollider.h = COLLIDER_SZ;
 
-	
 	UpdateColliders();
 
 	velocity = Vector2(0,0);
 	status = PLAYER_STATUS::STATIONARY;
 
 	//initialise animations
-	UVTranslator translator(256, 32, 32, 32);
-	translator.GetUV(animStationary, 0, 0);
-	translator.GetUV(animMove1, 0, 1);
-	translator.GetUV(animMove2, 0, 2);
-	translator.GetUV(animMove3, 0, 3);
-	translator.GetUV(animDead, 0, 4);
+	UVTranslator translator(512, 512, 32, 32);
+	translator.GetUV(animStationary, playerNum, 0);
+	translator.GetUV(animMove1, playerNum, 1);
+	translator.GetUV(animMove2, playerNum, 2);
+	translator.GetUV(animMove3, playerNum, 3);
+	translator.GetUV(animDead, playerNum, 4);
 	
 	currentAnimation = animStationary;
 
@@ -59,6 +60,7 @@ Player::Player(int id_)
 	maxSpeed = dm.GetValueFloat(0, "top_speed");
 	jumpForce = dm.GetValueFloat(0, "jump_force");
 	accelleration = dm.GetValueFloat(0, "accelleration");	
+	terminalVelocity = dm.GetValueFloat(0, "terminal_velocity");	
 }
 
 Player::~Player(void)
@@ -75,14 +77,14 @@ void Player::InitListener(PlayerProjectileListener* playerProjectileListener_)
 void Player::UpdateColliders()
 {
 	//update colliders
-	topCollider.x = pos.x + TILE_S * 0.5f;
+	topCollider.x = pos.x + PLAYER_S * 0.5f;
 	topCollider.y = pos.y;
-	bottomCollider.x = pos.x + TILE_S * 0.5f;
-	bottomCollider.y = pos.y + TILE_S + 3;
+	bottomCollider.x = pos.x + PLAYER_S * 0.5f;
+	bottomCollider.y = pos.y + PLAYER_S + 3;
 	leftCollider.x = pos.x;
-	leftCollider.y = pos.y + TILE_S * 0.5f;
-	rightCollider.x = pos.x + TILE_S;
-	rightCollider.y = pos.y + TILE_S * 0.5f;
+	leftCollider.y = pos.y + PLAYER_S * 0.5f;
+	rightCollider.x = pos.x + PLAYER_S;
+	rightCollider.y = pos.y + PLAYER_S * 0.5f;
 
 
 	hitCollider.x = pos.x;
@@ -96,27 +98,13 @@ void Player::HandleCollision(vector<Platform>& platform_, std::vector<Enemy>& en
 	//check collision	
 	for ( auto &env : platform_ )
 	{
-		//if ( env.TileType() > ENVIRO_TILE::PLATFORMS_START && env.TileType() < ENVIRO_TILE::PLATFORMS_END )
-		//{
 		if ( env.Active() && env.Collider() != nullptr)
-		{
-			//if ( Collision::RectCollision(topCollider, env))
-			//{
-			//	if  (velocity.y > 0)
-			//		velocity.y = 0;
-			//		//velocity.y = -velocity.y;
-			//}
-			
-			//cout << "bottom collider x" << bottomCollider.x << endl;
-			//cout << "bottom collider y" << bottomCollider.y << endl;
-			
+		{			
 			//only check bottom collision with platform if we are falling. 			
 			if ( velocity.y > 0.1f ) 
 			{
 				if ( Collision::RectCollision(bottomCollider, *env.Collider()))
 				{
-				
-					//std::cout << "bottom collision with platform" << std::endl;
 					status = RUNNING;
 					onPlatform = true;
 					velocity.y = 0;
@@ -131,13 +119,19 @@ void Player::HandleCollision(vector<Platform>& platform_, std::vector<Enemy>& en
 				if ( Collision::RectCollision(leftCollider, *env.Collider()))
 				{
 					UndoX();
-					//PUSH HIM ONE PIXEL RIGHT
 					pos.x += 1;
 				}
 				if ( Collision::RectCollision(rightCollider, *env.Collider()))
 				{
 					UndoX();
 					pos.x -= 1;
+				}
+
+				if ( Collision::RectCollision(topCollider, *env.Collider()))
+				{
+					if  (velocity.y < 0)
+						velocity.y = 0;
+						//velocity.y = -velocity.y;
 				}
 			}
 
@@ -195,6 +189,11 @@ void Player::ApplyGravity()
 			Vector2 gravityVec(0, (gravity)); 
 			velocity += gravityVec;	
 		}
+
+		//dont go above terminal velocity
+		if ( velocity.y > terminalVelocity )
+			velocity.y = terminalVelocity;
+		
 	}
 }
 
@@ -337,6 +336,25 @@ void Player::Draw()
 	MoveSprite(SpriteSheet::PlayerSprite(), pos.x, pos.y);
 	DrawSprite(SpriteSheet::PlayerSprite(), faceLeft, 1.0f, true);
 	//DrawString(to_string(FPS).c_str(), 50, 500);
+
+	//update the text
+	stringstream str;
+	if ( playerNum == 0 )
+	{		
+		str << "Glen: " << kills;
+		guiText.SetText(str.str());
+		guiText.SetPos(Vector2(50, 25));
+		guiText.SetAlignment(TEXT_ALIGNMENT::ALIGN_LEFT);
+	}
+	if ( playerNum == 1)
+	{
+		str << "John: " << kills;
+		guiText.SetText(str.str());
+		guiText.SetPos(Vector2(SCREEN_W-50, 25));
+		guiText.SetAlignment(TEXT_ALIGNMENT::ALIGN_RIGHT);
+	}
+
+	guiText.Draw();
 
 #ifdef SHOW_COLLIDERS
 	DrawRect(bottomCollider);

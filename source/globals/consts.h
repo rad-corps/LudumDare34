@@ -4,12 +4,12 @@
 #define TILE_S 32
 
 //actual PLAYER_S is 32 (32 * 4)
-#define PLAYER_S 32
+#define PLAYER_S 64
 
-#define SCREEN_W 1280
-#define SCREEN_H 720
+#define SCREEN_W 1920
+#define SCREEN_H 1080
 
-#define COLLIDER_SZ 3
+#define COLLIDER_SZ 5
 #define SHOW_COLLIDERS
 
 #define TERR_SPRITESHEET_W 800

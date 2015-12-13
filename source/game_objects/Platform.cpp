@@ -14,7 +14,7 @@ Platform::Platform(int col_, int row_, int tileType_) : tileType(tileType_), row
 
 	//dont set rect for tile type 1
 	collider = nullptr;
-	if ( tileType_ != 1 )
+	if ( tileType_ == 2 || tileType_ == 3 )
 	{
 		collider = new SDL_Rect();
 		collider->w = w;
@@ -22,6 +22,15 @@ Platform::Platform(int col_, int row_, int tileType_) : tileType(tileType_), row
 		collider->x = x;
 		collider->y = y;
 	}
+	if ( tileType_ == 0 )
+	{
+		collider = new SDL_Rect();
+		collider->w = w;
+		collider->h = 8;
+		collider->x = x;
+		collider->y = y;
+	}
+
 	
 	InitialiseGraphic();
 	isFalling = false;

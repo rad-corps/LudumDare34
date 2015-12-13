@@ -48,6 +48,14 @@ PSGameLoop::PSGameLoop(int level_, std::vector<Player*> players_) : newProgramSt
 PSGameLoop::~PSGameLoop(void)
 {
 	//SetBGColour( 0x2C, 0x2C, 0x2C );
+
+	//kill the players
+	for (auto &player : players)
+	{
+		delete player;
+	}
+
+	ClearGamePads();
 }
 
 void PSGameLoop::KeyDown(SDL_Keycode key_)
