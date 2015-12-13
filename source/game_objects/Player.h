@@ -7,6 +7,7 @@
 #include "../GLAH/Vector.h"
 #include "../math/Rect.h"
 #include <vector>
+#include <map>
 #include "GLText.h"
 
 //#include "GLAH\GLAHInput.h"
@@ -87,6 +88,7 @@ private:
 	float jumpForce;
 	float accelleration;
 
+	std::map<SDL_GameControllerButton, bool> buttonDown;
 
 };
 

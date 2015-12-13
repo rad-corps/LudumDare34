@@ -42,8 +42,9 @@
 //
 //};
 
-class Platform : public SDL_Rect
+class Platform //: public SDL_Rect
 {
+
 public:
 	Platform(int col_, int row_, int tileType_);
 	~Platform(void);
@@ -64,6 +65,10 @@ public:
 
 	float* UV();
 
+	int x, y, w, h;
+
+	SDL_Rect* Collider();
+
 private:
 	void InitialiseGraphic();
 	float uv[4];
@@ -73,6 +78,8 @@ private:
 	int row, col;
 	bool isFalling;
 	bool active;
+
+	SDL_Rect* collider;
 
 //	GLAHGraphics * gfx;
 };

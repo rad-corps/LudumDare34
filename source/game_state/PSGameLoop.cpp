@@ -108,9 +108,6 @@ ProgramState* PSGameLoop::Update(float delta_)
 //Draw Game
 void PSGameLoop::Draw()
 {
-	for ( auto &player : players )
-		player->Draw();
-
 	for ( auto &projectiles : playerProjectiles)
 		projectiles.Draw();
 
@@ -119,6 +116,9 @@ void PSGameLoop::Draw()
 
 	for (auto &env : platforms )
 		env.Draw();		
+
+	for ( auto &player : players )
+		player->Draw();
 
 	for (auto &shell : shells )
 		shell.Draw();	

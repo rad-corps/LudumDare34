@@ -337,6 +337,5 @@ void PSLevelEditor::Draw()
 
 	if ( showInstructions )
 		for ( auto& text : instructions )
-			text.Draw();
-	
+			text.Draw();	
 }

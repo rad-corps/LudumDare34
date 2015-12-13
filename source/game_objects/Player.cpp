@@ -75,14 +75,14 @@ void Player::InitListener(PlayerProjectileListener* playerProjectileListener_)
 void Player::UpdateColliders()
 {
 	//update colliders
-	topCollider.x = pos.x;
+	topCollider.x = pos.x + TILE_S * 0.5f;
 	topCollider.y = pos.y;
 	bottomCollider.x = pos.x + TILE_S * 0.5f;
 	bottomCollider.y = pos.y + TILE_S + 3;
 	leftCollider.x = pos.x;
-	leftCollider.y = pos.y + TILE_S / 0.5f;
+	leftCollider.y = pos.y + TILE_S * 0.5f;
 	rightCollider.x = pos.x + TILE_S;
-	rightCollider.y = pos.y + TILE_S / 0.5f;
+	rightCollider.y = pos.y + TILE_S * 0.5f;
 
 
 	hitCollider.x = pos.x;
@@ -98,7 +98,7 @@ void Player::HandleCollision(vector<Platform>& platform_, std::vector<Enemy>& en
 	{
 		//if ( env.TileType() > ENVIRO_TILE::PLATFORMS_START && env.TileType() < ENVIRO_TILE::PLATFORMS_END )
 		//{
-		if ( env.Active() )
+		if ( env.Active() && env.Collider() != nullptr)
 		{
 			//if ( Collision::RectCollision(topCollider, env))
 			//{
@@ -113,7 +113,7 @@ void Player::HandleCollision(vector<Platform>& platform_, std::vector<Enemy>& en
 			//only check bottom collision with platform if we are falling. 			
 			if ( velocity.y > 0.1f ) 
 			{
-				if ( Collision::RectCollision(bottomCollider, env))
+				if ( Collision::RectCollision(bottomCollider, *env.Collider()))
 				{
 				
 					//std::cout << "bottom collision with platform" << std::endl;
@@ -124,17 +124,23 @@ void Player::HandleCollision(vector<Platform>& platform_, std::vector<Enemy>& en
 					MoveTo(Vector2(pos.x, env.y - PLAYER_S));
 				}
 			}
-			//if ( Collision::RectCollision(leftCollider, env))
-			//{
-			//	UndoX();
-			//	//PUSH HIM ONE PIXEL RIGHT
-			//	pos.x += 1;
-			//}
-			//if ( Collision::RectCollision(rightCollider, env))
-			//{
-			//	UndoX();
-			//	pos.x -= 1;
-			//}
+
+			//check left and right collision on types 2 and 3
+			if  ( env.TileType() == 2 || env.TileType() == 3 )
+			{
+				if ( Collision::RectCollision(leftCollider, *env.Collider()))
+				{
+					UndoX();
+					//PUSH HIM ONE PIXEL RIGHT
+					pos.x += 1;
+				}
+				if ( Collision::RectCollision(rightCollider, *env.Collider()))
+				{
+					UndoX();
+					pos.x -= 1;
+				}
+			}
+
 		}
 		//}
 	}
@@ -177,82 +183,85 @@ void Player::UndoY()
 void Player::ApplyGravity()
 {
 	//gravity only if jumping
-	Vector2 gravityVec(0, (gravity)); 
 	if ( status == JUMPING )
 	{
-		velocity += gravityVec;	
+		if ( jumpHeld )
+		{
+			Vector2 gravityVec(0, (gravity * 0.5f)); 
+			velocity += gravityVec;	
+		}
+		else
+		{
+			Vector2 gravityVec(0, (gravity)); 
+			velocity += gravityVec;	
+		}
 	}
 }
 
 void Player::GamePadButtonDown(SDL_GameControllerButton button_)
 {
 	cout << "GamePadButtonDown" << endl;
-	if ( button_ == SDL_CONTROLLER_BUTTON_DPAD_LEFT ) 
-	{
-		faceLeft = true;
-		pos.x -= maxSpeed * DELTA;
-		if ( onPlatform ) 
-			status = RUNNING;
-	}
+	buttonDown[button_] = true;
 }
 
 void Player::GamePadButtonUp(SDL_GameControllerButton button_)
 {
 	cout << "GamePadButtonUp" << endl;
+	buttonDown[button_] = false;
 }
 
 void Player::HandleInput(float delta_)
 {
-	//if ( IsKeyDown(SDLK_a ) || IsGamePadButtonDown( SDL_CONTROLLER_BUTTON_DPAD_LEFT ) )
-	//{
-	//	faceLeft = true;
-	//	pos.x -= maxSpeed * delta_;
-	//	if ( onPlatform ) 
-	//		status = RUNNING;
-	//}
-	//else if ( IsKeyDown(SDLK_d ) || IsGamePadButtonDown( SDL_CONTROLLER_BUTTON_DPAD_RIGHT ) )
-	//{
-	//	faceLeft = false;
-	//	pos.x += maxSpeed * delta_;
-	//	
-	//	if ( onPlatform ) 
-	//		status = RUNNING;
-	//}
-	//else if ( onPlatform ) 
-	//{
-	//	status = STATIONARY;
-	//}
+	if ( buttonDown[ SDL_CONTROLLER_BUTTON_DPAD_LEFT ] )
+	{
+		faceLeft = true;
+		pos.x -= maxSpeed * delta_;
+		if ( onPlatform ) 
+			status = RUNNING;
+	}
+	else if ( buttonDown[ SDL_CONTROLLER_BUTTON_DPAD_RIGHT ] )
+	{
+		faceLeft = false;
+		pos.x += maxSpeed * delta_;
+		
+		if ( onPlatform ) 
+			status = RUNNING;
+	}
+	else if ( onPlatform ) 
+	{
+		status = STATIONARY;
+	}
 
-	////only jump if not already jumping
-	//if ( (IsKeyDown(SDLK_w ) || IsGamePadButtonDown( SDL_CONTROLLER_BUTTON_A )) && status != PLAYER_STATUS::JUMPING && !jumpHeld)
-	//{
-	//	jumpHeld = true;
-	//	status = JUMPING;	
-	//	
-	//	//will only happen for one frame
-	//	velocity.y -= jumpForce;
-	//}
+	//only jump if not already jumping
+	if ( buttonDown[ SDL_CONTROLLER_BUTTON_A ] && status != PLAYER_STATUS::JUMPING && !jumpHeld)
+	{
+		jumpHeld = true;
+		status = JUMPING;	
+		
+		//will only happen for one frame
+		velocity.y -= jumpForce;
+	}
 
-	//if ( !IsKeyDown(SDLK_w) )
-	//{
-	//	jumpHeld = false;
-	//}
+	if ( !buttonDown[ SDL_CONTROLLER_BUTTON_A ] )
+	{
+		jumpHeld = false;
+	}
 
-	//if ( (IsKeyDown(SDLK_SPACE) || IsGamePadButtonDown( SDL_CONTROLLER_BUTTON_X ))&& shootHeld == false )
-	//{
-	//	shootHeld = true;
-	//	cout << "SPACE PRESSED" << endl;
-	//	
-	//	if ( faceLeft )
-	//		playerProjectileListener->PlayerProjectileFired(pos, Vector2(-1, 0));
-	//	else
-	//		playerProjectileListener->PlayerProjectileFired(pos, Vector2(1, 0));
+	if ( buttonDown[ SDL_CONTROLLER_BUTTON_X ] && shootHeld == false )
+	{
+		shootHeld = true;
+		cout << "SPACE PRESSED" << endl;
+		
+		if ( faceLeft )
+			playerProjectileListener->PlayerProjectileFired(pos, Vector2(-1, 0));
+		else
+			playerProjectileListener->PlayerProjectileFired(pos, Vector2(1, 0));
 
-	//}
-	//else if (!IsKeyDown(SDLK_SPACE) && !IsGamePadButtonDown( SDL_CONTROLLER_BUTTON_X ))
-	//{
-	//	shootHeld = false;
-	//}
+	}
+	else if (!buttonDown[ SDL_CONTROLLER_BUTTON_X ])
+	{
+		shootHeld = false;
+	}
 }
 
 void Player::UpdateAnimation(float delta_)
@@ -331,6 +340,9 @@ void Player::Draw()
 
 #ifdef SHOW_COLLIDERS
 	DrawRect(bottomCollider);
+	DrawRect(leftCollider);
+	DrawRect(rightCollider);
+	DrawRect(topCollider);
 #endif
 
 	playerSpeak.Draw();

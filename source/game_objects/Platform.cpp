@@ -7,11 +7,22 @@
 
 Platform::Platform(int col_, int row_, int tileType_) : tileType(tileType_), row(row_), col(col_), scaleX(1), scaleY(1)
 {
-//	gfx = GLAHGraphics::Instance();
 	w = TILE_S;
 	h = TILE_S;
 	x = col_ * TILE_S;
 	y = row_ * TILE_S;
+
+	//dont set rect for tile type 1
+	collider = nullptr;
+	if ( tileType_ != 1 )
+	{
+		collider = new SDL_Rect();
+		collider->w = w;
+		collider->h = h;
+		collider->x = x;
+		collider->y = y;
+	}
+	
 	InitialiseGraphic();
 	isFalling = false;
 	active = true;
@@ -37,8 +48,11 @@ void Platform::InitialiseGraphic()
 	UVTranslator trans(TERR_SPRITESHEET_W,TERR_SPRITESHEET_H,TERR_TILE_S,TERR_TILE_S);
 	
 	//get row and col based on tileType
-	int spriteSheetRow = tileType / 3;
-	int spriteSheetCol = tileType % 3;
+	const int TERR_SPR_ROWS =  TERR_SPRITESHEET_H / TERR_TILE_S;
+	const int TERR_SPR_COLS =  TERR_SPRITESHEET_W / TERR_TILE_S;
+
+	int spriteSheetRow = tileType / TERR_SPR_ROWS;
+	int spriteSheetCol = tileType % TERR_SPR_COLS;
 
 	trans.GetUV(uv, spriteSheetRow, spriteSheetCol);
 
@@ -84,6 +98,11 @@ void Platform::InitialiseGraphic()
 	//case TREE_LG_SILVER: 		translator.GetUV(uv, 34, 5, 2, 2); break;
 	//}
 
+}
+
+SDL_Rect* Platform::Collider()
+{
+	return collider;
 }
 
 void Platform::Fall()
@@ -138,7 +157,8 @@ void Platform::Draw(float alpha_)
 	//ScaleSprite(SpriteSheet::Sprite(), 1, 1);
 	
 #ifdef SHOW_COLLIDERS	
-	DrawRect(*this);
+	if ( collider != nullptr )
+		DrawRect(*collider);
 #endif
 }
 
