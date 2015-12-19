@@ -29,8 +29,8 @@ Player::Player(int id_)
 	leftCollider.h = COLLIDER_SZ;
 	rightCollider.w = COLLIDER_SZ;
 	rightCollider.h = COLLIDER_SZ;
-	hitCollider.w = PLAYER_S;
-	hitCollider.h = PLAYER_S;
+	hitCollider.w = PLAYER_S * FileSettings::GetFloat("SCALE_W");
+	hitCollider.h = PLAYER_S * FileSettings::GetFloat("SCALE_H");
 
 	UpdateColliders();
 
@@ -77,14 +77,14 @@ void Player::InitListener(PlayerProjectileListener* playerProjectileListener_)
 void Player::UpdateColliders()
 {
 	//update colliders
-	topCollider.x = pos.x + PLAYER_S * 0.5f;
+	topCollider.x = pos.x + (PLAYER_S * FileSettings::GetFloat("SCALE_W"))* 0.5f;
 	topCollider.y = pos.y;
-	bottomCollider.x = pos.x + PLAYER_S * 0.5f;
-	bottomCollider.y = pos.y + PLAYER_S + 3;
+	bottomCollider.x = pos.x + (PLAYER_S * FileSettings::GetFloat("SCALE_W")) * 0.5f;
+	bottomCollider.y = pos.y + (PLAYER_S * FileSettings::GetFloat("SCALE_H")) + 3;
 	leftCollider.x = pos.x;
-	leftCollider.y = pos.y + PLAYER_S * 0.5f;
-	rightCollider.x = pos.x + PLAYER_S;
-	rightCollider.y = pos.y + PLAYER_S * 0.5f;
+	leftCollider.y = pos.y + (PLAYER_S * FileSettings::GetFloat("SCALE_H")) * 0.5f;
+	rightCollider.x = pos.x + (PLAYER_S * FileSettings::GetFloat("SCALE_W"));
+	rightCollider.y = pos.y + (PLAYER_S * FileSettings::GetFloat("SCALE_H")) * 0.5f;
 
 
 	hitCollider.x = pos.x;
@@ -109,7 +109,7 @@ void Player::HandleCollision(vector<Platform>& platform_, std::vector<PlayerProj
 					onPlatform = true;
 					velocity.y = 0;
 					//push him back up to the top of the platform
-					MoveTo(Vector2(pos.x, env.y - PLAYER_S));
+					MoveTo(Vector2(pos.x, env.y - (PLAYER_S * FileSettings::GetFloat("SCALE_H"))));
 				}
 			}
 

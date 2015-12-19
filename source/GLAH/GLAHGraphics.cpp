@@ -125,7 +125,7 @@ int Initialise(int a_iWidth, int a_iHeight, bool a_bFullscreen, const char* a_pW
         //Create window
         //window = SDL_CreateWindow( "Tradie Wars", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, a_iWidth, a_iHeight, SDL_WINDOW_SHOWN );
 		window = SDL_CreateWindow("Tradie Wars", 0, 0, FileSettings::GetInt("SCREEN_W"), FileSettings::GetInt("SCREEN_H"), SDL_WINDOW_SHOWN);
-		SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
+		//SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
         if( window == NULL )
         {
             printf( "Window could not be created! SDL_Error: %s\n", SDL_GetError() );
