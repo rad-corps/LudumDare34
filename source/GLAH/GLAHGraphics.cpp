@@ -21,6 +21,7 @@
 #include <vector>
 #include <algorithm>
 #include <map>
+#include "../data/FileSettings.h"
 
 
 using namespace std::chrono; 
@@ -99,6 +100,8 @@ void ClearGamePads()
 
 int Initialise(int a_iWidth, int a_iHeight, bool a_bFullscreen, const char* a_pWindowTitle  )
 {
+	
+
 	gameControllerListeners.resize(4); //max of 4 controllers.
 
     //Initialize SDL
@@ -109,9 +112,20 @@ int Initialise(int a_iWidth, int a_iHeight, bool a_bFullscreen, const char* a_pW
 	else
     {
 
+		SDL_DisplayMode displayMode;
+		int should_be_zero = SDL_GetCurrentDisplayMode(0, &displayMode);
+		FileSettings::AddIntValue("SCREEN_W", displayMode.w);
+		FileSettings::AddIntValue("SCREEN_H", displayMode.h);
+		float scale_w = (float)displayMode.w / BASE_W;
+		float scale_h = (float)displayMode.h / BASE_H;
+		FileSettings::AddFloatValue("SCALE_W", scale_w);
+		FileSettings::AddFloatValue("SCALE_H", scale_h);
+		
 
         //Create window
-        window = SDL_CreateWindow( "Tradie Wars", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, a_iWidth, a_iHeight, SDL_WINDOW_SHOWN );
+        //window = SDL_CreateWindow( "Tradie Wars", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, a_iWidth, a_iHeight, SDL_WINDOW_SHOWN );
+		window = SDL_CreateWindow("Tradie Wars", 0, 0, FileSettings::GetInt("SCREEN_W"), FileSettings::GetInt("SCREEN_H"), SDL_WINDOW_SHOWN);
+		SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
         if( window == NULL )
         {
             printf( "Window could not be created! SDL_Error: %s\n", SDL_GetError() );
@@ -191,11 +205,10 @@ SDL_Rect			GetScreenRect()
 	SDL_Rect ret;
 	ret.x = camX;
 	ret.y = camY;
-	ret.w = SCREEN_W;
-	ret.h = SCREEN_H;
+	ret.w = FileSettings::GetInt("SCREEN_W");
+	ret.h = FileSettings::GetInt("SCREEN_H");
 	return ret;
 }
-
 //unsigned int	GLAHGraphics::CreateSprite	
 // textureName_		: filename/path of the texture to load
 // width_			: width of texture
@@ -258,28 +271,12 @@ void DrawSprite(SDL_Texture* sprite_, bool xFlip_, float alpha_, bool effectedBy
 	int breakpointCondition = spriteList[sprite_].size.x;
 
 	SDL_Rect src = { (int)entity.UV[0], (int)entity.UV[1], (int)entity.UV[2], (int)entity.UV[3] };
-	
-	//destination draw point needs to be -(int)entity.size.x/2 - (int)entity.size.y/2
-	
-	//if ( effectedByCamera_ )
-	//{
-	//	xpos = (int)entity.position.x - (int)camX + (int)(SCREEN_W * 0.5f) - (int)(entity.size.x * 0.5f);
-	//	ypos = (int)(SCREEN_H * 0.5f) - (int)entity.position.y + (int)camY - (int)(entity.size.y * 0.5f);
-	//}
-	//else
-	//{
-		////draw from centre
-		//xpos = (int)entity.position.x - (int)(entity.size.x * 0.5f);
-		//ypos = (int)entity.position.y - (int)(entity.size.y * 0.5f);
 
-		//draw from top left
-		xpos = (int)entity.position.x;
-		ypos = (int)entity.position.y;
-	//}
+	//draw from top left
+	xpos = (int)entity.position.x;
+	ypos = (int)entity.position.y;
 
 	SDL_Rect dst = {xpos, ypos, (int)entity.size.x, (int)entity.size.y };
-
-	
 
 	//flipping horizontally?
 	SDL_RendererFlip flip = SDL_FLIP_NONE;

@@ -13,14 +13,14 @@ using namespace std;
 PSMainMenu::PSMainMenu(void) : newState(nullptr)
 {
 	cout << "PSMainMenu" << endl;
-	menuStrings.push_back("----------Dont Panic Alpha----------");
+	menuStrings.push_back("----------Tradie Wars Alpha----------");
 	menuStrings.push_back("Play Game                          1");
 	menuStrings.push_back("Create New Level                   2");
 	menuStrings.push_back("Modify Existing Level              3");
 	menuStrings.push_back("Exit                               4");
 
 	//create the GLText objects
-	Vector2 textPos(SCREEN_W*0.5, 100);
+	Vector2 textPos(FileSettings::GetInt("SCREEN_W") * 0.5f, 100);
 	GLText txt;
 	txt.SetAlignment(TEXT_ALIGNMENT::ALIGN_CENTRE);
 	txt.SetHUD(true);

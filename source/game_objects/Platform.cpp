@@ -7,10 +7,10 @@
 
 Platform::Platform(int col_, int row_, int tileType_) : tileType(tileType_), row(row_), col(col_), scaleX(1), scaleY(1)
 {
-	w = TILE_S;
-	h = TILE_S;
-	x = col_ * TILE_S;
-	y = row_ * TILE_S;
+	w = TILE_S * FileSettings::GetFloat("SCALE_W");
+	h = TILE_S * FileSettings::GetFloat("SCALE_H");
+	x = col_ * w;
+	y = row_ * h;
 
 	//dont set rect for tile type 1
 	collider = nullptr;
@@ -26,7 +26,7 @@ Platform::Platform(int col_, int row_, int tileType_) : tileType(tileType_), row
 	{
 		collider = new SDL_Rect();
 		collider->w = w;
-		collider->h = 8;
+		collider->h = 8; //TODO scale this down
 		collider->x = x;
 		collider->y = y;
 	}
@@ -64,49 +64,6 @@ void Platform::InitialiseGraphic()
 	int spriteSheetCol = tileType % TERR_SPR_COLS;
 
 	trans.GetUV(uv, spriteSheetRow, spriteSheetCol);
-
-	//switch ( tileType )
-	//{
-	////player / enemy can touch
-	//case RED_BRICK_SURFACE :	translator.GetUV(uv, 4, 0); break;
-	//case BLUE_BRICK_SURFACE :	translator.GetUV(uv, 4, 1);	break;
-	//case GREY_BRICK_SURFACE :	translator.GetUV(uv, 4, 2);	break;
-	//case GOLD_BRICK_SURFACE :	translator.GetUV(uv, 4, 3);	break;
-	//case GREEN_BRICK_SURFACE :	translator.GetUV(uv, 4, 4);	break;
-	//case RED2_BRICK_SURFACE :	translator.GetUV(uv, 4, 5);	break;
-	//case SILVER_BRICK_SURFACE : translator.GetUV(uv, 4, 6);	break;
-	//case RED3_BRICK_SURFACE :	translator.GetUV(uv, 4, 7);	break;
-	//case GOLD2_BRICK_SURFACE :	translator.GetUV(uv, 4, 8);	break;
-	//case GOLD3_BRICK_SURFACE :	translator.GetUV(uv, 4, 9);	break;
-	//case ROCK_SURFACE :			translator.GetUV(uv, 6, 0);	break;
-	//case DIRT_SURFACE :			translator.GetUV(uv, 6, 1);	break;
-	//case MUD_SURFACE :			translator.GetUV(uv, 6, 2);	break;
-	//case DENSE_MUD_SURFACE :	translator.GetUV(uv, 6, 3);	break;
-
-	//case RED_BRICK_BASE :		translator.GetUV(uv, 5, 0); break;
-	//case BLUE_BRICK_BASE :		translator.GetUV(uv, 5, 1);	break;
-	//case GREY_BRICK_BASE :		translator.GetUV(uv, 5, 2);	break;
-	//case GOLD_BRICK_BASE :		translator.GetUV(uv, 5, 3);	break;
-	//case GREEN_BRICK_BASE :		translator.GetUV(uv, 5, 4);	break;
-	//case RED2_BRICK_BASE :		translator.GetUV(uv, 5, 5);	break;
-	//case SILVER_BRICK_BASE :	translator.GetUV(uv, 5, 6);	break;
-	//case RED3_BRICK_BASE :		translator.GetUV(uv, 5, 7);	break;
-	//case GOLD2_BRICK_BASE :		translator.GetUV(uv, 5, 8);	break;
-	//case GOLD3_BRICK_BASE :		translator.GetUV(uv, 5, 9);	break;
-	//case ROCK_BASE :			translator.GetUV(uv, 7, 0);	break;
-	//case DIRT_BASE :			translator.GetUV(uv, 7, 1);	break;
-	//case MUD_BASE :				translator.GetUV(uv, 7, 2);	break;
-	//case DENSE_MUD_BASE :		translator.GetUV(uv, 7, 3);	break;
-
-	////decoration tiles
-	//case TREE_SM_SIL_1 : 		translator.GetUV(uv, 35, 3); break;
-	//case TREE_SM_SIL_2 : 		translator.GetUV(uv, 35, 4); break;
-	//case TREE_SM_SIL_3 : 		translator.GetUV(uv, 35, 7); break;
-	//case TREE_SM_SIL_4 : 		translator.GetUV(uv, 35, 9); break;
-	//case TREE_SM_SIL_5 : 		translator.GetUV(uv, 35, 10); break;
-	//case TREE_LG_SILVER: 		translator.GetUV(uv, 34, 5, 2, 2); break;
-	//}
-
 }
 
 SDL_Rect* Platform::Collider()

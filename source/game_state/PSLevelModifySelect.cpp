@@ -80,7 +80,7 @@ void PSLevelModifySelect::Init()
 	char * error = "";
 	dm.Select("./resources/db/dontpanic.db", "tbl_level", "id, name", "", "", error);
 
-	textPos = Vector2(SCREEN_W*0.5, 100);
+	textPos = Vector2(FileSettings::GetInt("SCREEN_W") * 0.5, 100);
 	GLText txtTemp;
 	txtTemp.SetAlignment(TEXT_ALIGNMENT::ALIGN_CENTRE);
 	txtTemp.SetHUD(true);

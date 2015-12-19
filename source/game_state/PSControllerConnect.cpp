@@ -11,7 +11,7 @@ PSControllerConnect::PSControllerConnect(void)
 
 	menuText.SetAlignment(TEXT_ALIGNMENT::ALIGN_CENTRE);
 	menuText.SetHUD(true);
-	menuText.SetPos(Vector2(SCREEN_W * 0.5f, 100));
+	menuText.SetPos(Vector2(FileSettings::GetInt("SCREEN_W") * 0.5f, 100));
 	menuText.SetText("Controller Connect Screen");
 
 	cout << "SDL_NumJoysticks()" << SDL_NumJoysticks() << endl;

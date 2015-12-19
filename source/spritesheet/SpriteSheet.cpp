@@ -32,11 +32,11 @@ void SpriteSheet::Init()
 	{
 		translator = UVTranslator(800, 1280, 16, 16);
 
-		sprite = CreateSprite("./resources/images/simples_pimples2.png", TILE_S, TILE_S, 0);
-		fontSprite = CreateSprite("./resources/images/courier.png", 16, 16, 0);
-		playerSprite = CreateSprite("./resources/images/player.png", PLAYER_S, PLAYER_S, 0);
+		sprite = CreateSprite("./resources/images/simples_pimples2.png", TILE_S * FileSettings::GetFloat("SCALE_W"), TILE_S * FileSettings::GetFloat("SCALE_H"), 0);
+		fontSprite = CreateSprite("./resources/images/courier.png", 16 * FileSettings::GetFloat("SCALE_W"), 16 * FileSettings::GetFloat("SCALE_H"), 0);
+		playerSprite = CreateSprite("./resources/images/player.png", PLAYER_S * FileSettings::GetFloat("SCALE_W"), PLAYER_S * FileSettings::GetFloat("SCALE_H"), 0);
 		//platformSprite = CreateSprite("./resources/images/platformTiles.png", TILE_S, TILE_S, 0);
-		platformSprite = CreateSprite("./resources/images/platforms.png", TILE_S, TILE_S, 0);
+		platformSprite = CreateSprite("./resources/images/platforms.png", TILE_S * FileSettings::GetFloat("SCALE_W"), TILE_S * FileSettings::GetFloat("SCALE_H"), 0);
 		
 		init = true;
 	}

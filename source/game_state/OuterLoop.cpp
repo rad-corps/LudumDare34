@@ -16,7 +16,7 @@
 //#include "windows.h"
 //#include "FrameworkHelpers.h"
 //#include "wtypes.h"
-#include "../data/FileSettings.h"
+
 #include "../spritesheet/SpriteSheet.h"
 #include <iostream>
 #include "../globals/consts.h"
@@ -45,11 +45,11 @@ OuterLoop::OuterLoop(void)
 	//int hor, ver;
 	//GetDesktopResolution(hor, ver);
 	//cout << "Screen Res: " << hor << "x" << ver << endl;
-	FileSettings::AddIntValue("SCREEN_W", SCREEN_W);
-	FileSettings::AddIntValue("SCREEN_H", SCREEN_H);
+	//FileSettings::AddIntValue("SCREEN_W", SCREEN_W);
+	//FileSettings::AddIntValue("SCREEN_H", SCREEN_H);
 
 	//Initialise( FileSettings::GetInt("SCREEN_W"), FileSettings::GetInt("SCREEN_H"),  FileSettings::GetBool("FULL_SCREEN"), "Dont Panic" );
-	Initialise( SCREEN_W, SCREEN_H, false, "Dont Panic" );
+	Initialise( -1, -1, false, "Tradie Wars" ); //SCREEN_W AND SCREEN_H NO LONGER USED
 	SpriteSheet::Init();
 	
 	//AddFont("./resources/fonts/arial.fnt");

@@ -338,7 +338,7 @@ void Player::Draw()
 	{
 		str << "John: " << kills;
 		guiText.SetText(str.str());
-		guiText.SetPos(Vector2(SCREEN_W-50, 25));
+		guiText.SetPos(Vector2(FileSettings::GetInt("SCREEN_W")-50, 25));
 		guiText.SetAlignment(TEXT_ALIGNMENT::ALIGN_RIGHT);
 	}
 

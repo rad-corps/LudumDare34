@@ -23,6 +23,7 @@ public:
 	static float GetFloat(std::string key_);
 	static int GetInt(std::string key_);
 	static std::string GetString(std::string key_);
+	static void AddFloatValue(std::string key_, float value_);
 	static void AddIntValue(std::string key_, int value_);
 	static void AddStringValue(std::string key_, std::string value_);
 	static void LoadIniFile();

@@ -48,7 +48,7 @@ void PSLevelEditor::Init()
 
 	promptText.SetHUD(true);
 	promptText.SetAlignment(TEXT_ALIGNMENT::ALIGN_CENTRE);
-	promptText.SetPos(Vector2(SCREEN_W/2, 50));
+	promptText.SetPos(Vector2(FileSettings::GetInt("SCREEN_W") * 0.5f, 50));
 	promptText.SetText("");
 
 	//glfwSetScrollCallback(GetWindow(), ScrollCallback); 
