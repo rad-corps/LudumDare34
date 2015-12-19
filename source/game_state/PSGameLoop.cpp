@@ -72,9 +72,18 @@ void PSGameLoop::GamePadButtonDown(SDL_GameControllerButton button_)
 
 ProgramState* PSGameLoop::Update(float delta_)
 {
+	int numPlayersAlive = 0;
 	//update player	
-	for (auto &player : players )
-		player->Update(delta_, platforms, playerProjectiles);
+	for (auto &player : players)
+	{
+		if (player->Update(delta_, platforms, playerProjectiles))
+			numPlayersAlive++;
+	}
+
+	if (numPlayersAlive < 2)
+	{
+		bool gameover = true;
+	}
 
 	//update platforms
 	for ( auto &env : platforms )

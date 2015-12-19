@@ -30,11 +30,13 @@ public:
 
 	void InitListener(PlayerProjectileListener* playerProjectileListener_);
 
-	virtual void Update(float delta_, std::vector<Platform>& platform_, std::vector<PlayerProjectile>& projectiles_);
+	bool Update(float delta_, std::vector<Platform>& platform_, std::vector<PlayerProjectile>& projectiles_);
 	virtual void Draw();
 
 	virtual void GamePadButtonDown(SDL_GameControllerButton button_);
 	virtual void GamePadButtonUp(SDL_GameControllerButton button_);
+
+	std::string Name();
 
 private:
 	void ApplyVelocity(Vector2 velocity_);
@@ -92,6 +94,5 @@ private:
 	int playerNum;
 	GLText guiText;
 	int kills;
-
 };
 

@@ -8,7 +8,7 @@
 
 
 Player::Player(int id_)
-	: kills(0)
+	: kills(0), alive(true)
 {
 //	gfx = GLAHGraphics::Instance();
 //	inpt = GLAHInput::Instance();
@@ -142,9 +142,10 @@ void Player::HandleCollision(vector<Platform>& platform_, std::vector<PlayerProj
 	{
 		if (projectile.IsActive())
 		{
-			if ( Collision::RectCollision(topCollider, projectile.GetRect() ) )
+			if (Collision::RectCollision(hitCollider, projectile.GetRect()))
 			{
-				cout << "Projectile Collided with player " << playerNum << endl;
+				cout << "Projectile Collided with player " << playerNum << endl; 
+				alive = false;
 			}
 		}
 	}
@@ -242,10 +243,11 @@ void Player::HandleInput(float delta_)
 		shootHeld = true;
 		cout << "SPACE PRESSED" << endl;
 		
+		//TODO REVISIT IMPORTANT SCALE PROJECTILE POSITION
 		if ( faceLeft )
-			playerProjectileListener->PlayerProjectileFired(pos, Vector2(-0.2, 0));
+			playerProjectileListener->PlayerProjectileFired(pos - Vector2(64, 0), Vector2(-0.2, 0));
 		else
-			playerProjectileListener->PlayerProjectileFired(pos, Vector2(0.2, 0));
+			playerProjectileListener->PlayerProjectileFired(pos + Vector2(64, 0), Vector2(0.2, 0));
 
 	}
 	else if (!buttonDown[ SDL_CONTROLLER_BUTTON_X ])
@@ -290,19 +292,23 @@ void Player::UpdateAnimation(float delta_)
 
 }
 
-void Player::Update(float delta_, vector<Platform>& platform_, std::vector<PlayerProjectile>& projectiles_ )
+bool Player::Update(float delta_, vector<Platform>& platform_, std::vector<PlayerProjectile>& projectiles_ )
 {
 	prevX = pos.x;
 	prevY = pos.y;
 	
-	if (alive )	
-		HandleInput(delta_);	
+	if (alive)
+		HandleInput(delta_);
 
 	ApplyGravity();	
 	ApplyVelocity(velocity);	
 	playerSpeak.SetPos(pos);
 	HandleCollision(platform_, projectiles_);
 	UpdateAnimation(delta_);
+
+	if (alive)
+		return true;
+	return false;
 }
 
 void Player::MoveTo(Vector2 pos_)
@@ -317,6 +323,27 @@ void Player::ApplyVelocity(Vector2 velocity_)
 	UpdateColliders();
 }
 
+std::string Player::Name()
+{ 
+	if (playerNum == 0)
+	{
+		return "Glen";
+	}
+	if (playerNum == 1)
+	{
+		return "John";
+	}
+	if (playerNum == 2)
+	{
+		return "Rex";
+	}
+	if (playerNum == 3)
+	{
+		return "Paul";
+	}
+	return "Invalid playerNum";
+}
+
 void Player::Draw()
 {
 	//set the UV
@@ -327,18 +354,26 @@ void Player::Draw()
 
 	//update the text
 	stringstream str;
+	str << Name() << kills;
+	guiText.SetText(str.str());
 	if ( playerNum == 0 )
 	{		
-		str << "Glen: " << kills;
-		guiText.SetText(str.str());
 		guiText.SetPos(Vector2(50, 25));
 		guiText.SetAlignment(TEXT_ALIGNMENT::ALIGN_LEFT);
 	}
 	if ( playerNum == 1)
 	{
-		str << "John: " << kills;
-		guiText.SetText(str.str());
 		guiText.SetPos(Vector2(FileSettings::GetInt("SCREEN_W")-50, 25));
+		guiText.SetAlignment(TEXT_ALIGNMENT::ALIGN_RIGHT);
+	}
+	if (playerNum == 2)
+	{
+		guiText.SetPos(Vector2(50, FileSettings::GetInt("SCREEN_H") - 50));
+		guiText.SetAlignment(TEXT_ALIGNMENT::ALIGN_LEFT);
+	}
+	if (playerNum == 3)
+	{
+		guiText.SetPos(Vector2(FileSettings::GetInt("SCREEN_W"), FileSettings::GetInt("SCREEN_H") - 50));
 		guiText.SetAlignment(TEXT_ALIGNMENT::ALIGN_RIGHT);
 	}
 
