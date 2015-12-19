@@ -19,7 +19,8 @@
 #include "PSMainMenu.h"
 
 
-PSGameLoop::PSGameLoop(int level_, std::vector<Player*> players_) : newProgramState(nullptr)
+PSGameLoop::PSGameLoop(int level_, std::vector<Player*> players_) 
+	: newProgramState(nullptr), gameOverTimer(0.0f), gameOver(false)
 {
 	players = players_;
 	AddInputListener(this);
@@ -72,6 +73,21 @@ void PSGameLoop::GamePadButtonDown(SDL_GameControllerButton button_)
 
 ProgramState* PSGameLoop::Update(float delta_)
 {
+	//reset the round when one player is left
+	if (gameOver)
+	{
+		gameOverTimer += delta_;
+		if (gameOverTimer > 3.0f)
+		{
+			gameOver = false;
+			for (auto &player : players)
+			{
+				player->Reset();
+				gameOverTimer = 0.0f;
+			}
+		}
+	}
+
 	int numPlayersAlive = 0;
 	//update player	
 	for (auto &player : players)
@@ -82,7 +98,7 @@ ProgramState* PSGameLoop::Update(float delta_)
 
 	if (numPlayersAlive < 2)
 	{
-		bool gameover = true;
+		gameOver = true;
 	}
 
 	//update platforms

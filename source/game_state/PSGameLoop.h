@@ -52,6 +52,8 @@ private:
 	std::vector<PlayerProjectile> playerProjectiles;
 
 	ProgramState* newProgramState;
+	float gameOverTimer;
+	bool gameOver;
 	//World world;
 };
 

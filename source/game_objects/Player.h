@@ -38,6 +38,9 @@ public:
 
 	std::string Name();
 
+	int ID();
+	void Reset();
+
 private:
 	void ApplyVelocity(Vector2 velocity_);
 	void MoveTo(Vector2 pos_);
@@ -94,5 +97,6 @@ private:
 	int playerNum;
 	GLText guiText;
 	int kills;
+	int id;
 };
 

@@ -8,31 +8,14 @@
 
 
 Player::Player(int id_)
-	: kills(0), alive(true)
+	: kills(0), alive(true), id(id_)
 {
 //	gfx = GLAHGraphics::Instance();
 //	inpt = GLAHInput::Instance();
-	AddGameControllerListener(this, id_);
-	playerNum = id_;
+	AddGameControllerListener(this, id);
+	playerNum = id;
 
-	pos = Vector2(200,200);
-
-	alive = true;
-
-	////initialise colliders
-	topCollider.w = COLLIDER_SZ;
-	topCollider.h = COLLIDER_SZ;
-	bottomCollider.w = COLLIDER_SZ;
-	bottomCollider.h = COLLIDER_SZ;
-
-	leftCollider.w = COLLIDER_SZ;
-	leftCollider.h = COLLIDER_SZ;
-	rightCollider.w = COLLIDER_SZ;
-	rightCollider.h = COLLIDER_SZ;
-	hitCollider.w = PLAYER_S * FileSettings::GetFloat("SCALE_W");
-	hitCollider.h = PLAYER_S * FileSettings::GetFloat("SCALE_H");
-
-	UpdateColliders();
+	Reset();
 
 	velocity = Vector2(0,0);
 	status = PLAYER_STATUS::STATIONARY;
@@ -61,6 +44,29 @@ Player::Player(int id_)
 	jumpForce = dm.GetValueFloat(0, "jump_force");
 	accelleration = dm.GetValueFloat(0, "accelleration");	
 	terminalVelocity = dm.GetValueFloat(0, "terminal_velocity");	
+}
+
+void Player::Reset()
+{
+	alive = true;
+	pos = Vector2(200, 200);
+
+	alive = true;
+
+	////initialise colliders
+	topCollider.w = COLLIDER_SZ;
+	topCollider.h = COLLIDER_SZ;
+	bottomCollider.w = COLLIDER_SZ;
+	bottomCollider.h = COLLIDER_SZ;
+
+	leftCollider.w = COLLIDER_SZ;
+	leftCollider.h = COLLIDER_SZ;
+	rightCollider.w = COLLIDER_SZ;
+	rightCollider.h = COLLIDER_SZ;
+	hitCollider.w = PLAYER_S * FileSettings::GetFloat("SCALE_W");
+	hitCollider.h = PLAYER_S * FileSettings::GetFloat("SCALE_H");
+
+	UpdateColliders();
 }
 
 Player::~Player(void)
@@ -315,6 +321,11 @@ void Player::MoveTo(Vector2 pos_)
 {
 	pos = pos_;
 	UpdateColliders();
+}
+
+int Player::ID()
+{
+	return id;
 }
 
 void Player::ApplyVelocity(Vector2 velocity_)
