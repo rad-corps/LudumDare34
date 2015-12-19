@@ -72,13 +72,13 @@ void PSLevelEditor::Init()
 	instructionsStr.push_back("LEFT MOUSE BUTTON TO PLACE");
 	instructionsStr.push_back("RIGHT MOUSE BUTTON TO DELETE");
 	instructionsStr.push_back("I: SHOW/HIDE INSTRUCTIONS");
-	instructionsStr.push_back("P: SET PLAYER POSITION");
-	instructionsStr.push_back("O: SET CANON POSITION");
-	instructionsStr.push_back("G: SET GOAL POSITION");
-	instructionsStr.push_back("E: SET ENEMY SPAWN POSITION");
+	//instructionsStr.push_back("P: SET PLAYER POSITION");
+	//instructionsStr.push_back("O: SET CANON POSITION");
+	//instructionsStr.push_back("G: SET GOAL POSITION");
+	//instructionsStr.push_back("E: SET ENEMY SPAWN POSITION");
 	//instructionsStr.push_back("C: COPY TILE");
 	//instructionsStr.push_back("V: PASTE TILE");
-	instructionsStr.push_back("CTRL + S: SAVE LEVEL");
+	instructionsStr.push_back("F1: SAVE LEVEL");
 
 	GLText tempText;
 	Vector2 instPos(30, 100);
@@ -94,11 +94,9 @@ void PSLevelEditor::Init()
 
 PSLevelEditor::PSLevelEditor(int levelID_) 
 {
-	
 	DBLevel dbLevel;
 	dbLevel.FillData(levelID_, platforms);
 	Init();
-	
 }
 
 PSLevelEditor::PSLevelEditor(void)
@@ -250,8 +248,8 @@ void PSLevelEditor::UpdateRowCol()
 	mousePos.y = (float)mouseY;
 	//std::cout << "x: " << mousePos.x << " - y: " << mousePos.y << std::endl;
 	//get row and column based on mousePos
-	col = mousePos.x / TILE_S;
-	row = mousePos.y / TILE_S;
+	col = mousePos.x / (TILE_S * FileSettings::GetFloat("SCALE_W"));
+	row = mousePos.y / (TILE_S * FileSettings::GetFloat("SCALE_H"));
 }
 
 void PSLevelEditor::HandleMouseDown()
@@ -286,7 +284,7 @@ void PSLevelEditor::HandleMouseDown()
 
 ProgramState* PSLevelEditor::Update(float delta_)
 {
-	pos = Vector2(col * TILE_S, row * TILE_S);
+	pos = Vector2(col * FileSettings::GetFloat("SCALE_W") * TILE_S, row * FileSettings::GetFloat("SCALE_H") * TILE_S);
 	
 	UpdateRowCol();
 	HandleMouseDown();

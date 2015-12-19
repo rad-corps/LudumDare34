@@ -30,7 +30,6 @@ Platform::Platform(int col_, int row_, int tileType_) : tileType(tileType_), row
 		collider->x = x;
 		collider->y = y;
 	}
-
 	
 	InitialiseGraphic();
 	isFalling = false;
