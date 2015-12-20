@@ -30,7 +30,7 @@ public:
 	void Draw();
 
 	//virtual void ShotFired(Vector2 pos_, Vector2 velocity_);
-	virtual void PlayerProjectileFired(Vector2 pos_, Vector2 velocity_);
+	virtual void PlayerProjectileFired(Vector2 pos_, Vector2 velocity_, int playerID_);
 	virtual void KeyDown(SDL_Keycode key_);
 	virtual void GamePadButtonDown(SDL_GameControllerButton button_);
 

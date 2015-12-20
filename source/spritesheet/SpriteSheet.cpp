@@ -6,7 +6,11 @@ SDL_Texture* SpriteSheet::sprite;
 SDL_Texture* SpriteSheet::fontSprite;
 SDL_Texture* SpriteSheet::playerSprite;
 SDL_Texture* SpriteSheet::platformSprite;
+SDL_Texture* SpriteSheet::projectileSprite;
+
 UVTranslator SpriteSheet::translator;
+
+
 
 SpriteSheet::SpriteSheet(void)
 {	
@@ -37,6 +41,7 @@ void SpriteSheet::Init()
 		playerSprite = CreateSprite("./resources/images/player.png", PLAYER_S * FileSettings::GetFloat("SCALE_W"), PLAYER_S * FileSettings::GetFloat("SCALE_H"), 0);
 		//platformSprite = CreateSprite("./resources/images/platformTiles.png", TILE_S, TILE_S, 0);
 		platformSprite = CreateSprite("./resources/images/platforms.png", TILE_S * FileSettings::GetFloat("SCALE_W"), TILE_S * FileSettings::GetFloat("SCALE_H"), 0);
+		projectileSprite = CreateSprite("./resources/images/projectiles.png", PROJECTILE_SZ * FileSettings::GetFloat("SCALE_W"), PROJECTILE_SZ * FileSettings::GetFloat("SCALE_H"), 0);
 		
 		init = true;
 	}
@@ -54,6 +59,13 @@ SDL_Texture* SpriteSheet::FontSprite()
 	if ( !init ) 
 		return nullptr;
 	return fontSprite;
+}
+
+SDL_Texture* SpriteSheet::ProjectileSprite()
+{
+	if (!init)
+		return nullptr;
+	return projectileSprite;
 }
 
 SDL_Texture* SpriteSheet::PlayerSprite()

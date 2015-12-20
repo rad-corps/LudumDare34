@@ -140,7 +140,6 @@ void Player::HandleCollision(vector<Platform>& platform_, std::vector<PlayerProj
 						//velocity.y = -velocity.y;
 				}
 			}
-
 		}
 	}
 
@@ -251,9 +250,9 @@ void Player::HandleInput(float delta_)
 		
 		//TODO REVISIT IMPORTANT SCALE PROJECTILE POSITION
 		if ( faceLeft )
-			playerProjectileListener->PlayerProjectileFired(pos - Vector2(64, 0), Vector2(-0.2, 0));
+			playerProjectileListener->PlayerProjectileFired(pos - Vector2(64, 0), Vector2(-0.2, -0.2), id);
 		else
-			playerProjectileListener->PlayerProjectileFired(pos + Vector2(64, 0), Vector2(0.2, 0));
+			playerProjectileListener->PlayerProjectileFired(pos + Vector2(64, 0), Vector2(0.2, -0.2), id);
 
 	}
 	else if (!buttonDown[ SDL_CONTROLLER_BUTTON_X ])

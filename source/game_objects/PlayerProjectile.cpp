@@ -18,13 +18,13 @@ PlayerProjectile::PlayerProjectile()
 
 	if ( !init ) 
 	{
-		UVTranslator trans(TERR_SPRITESHEET_W,TERR_SPRITESHEET_H,TERR_TILE_S,TERR_TILE_S);
+		UVTranslator trans(64,16,16,16);
 		trans.GetUV(uv, 0, 0);
 		init = true;
 	}
 
-	width = TILE_S;
-	height = TILE_S;
+	width = PROJECTILE_SZ * FileSettings::GetFloat("SCALE_W");
+	height = PROJECTILE_SZ * FileSettings::GetFloat("SCALE_H");;
 }
 
 PlayerProjectile::~PlayerProjectile()
@@ -32,23 +32,33 @@ PlayerProjectile::~PlayerProjectile()
 	cout << "Projectile Created" << endl; 
 }
 
-void PlayerProjectile::Shoot(Vector2 pos_, Vector2 direction_)
+void PlayerProjectile::Shoot(Vector2 pos_, Vector2 direction_, int playerID_)
 {
 //	timer = 0.0f;
 	active = true;
 	pos = pos_;
 	
 	velocity = direction_ * 2000;
+
+	UVTranslator trans(64, 16, 16, 16);
+	trans.GetUV(uv, 0, playerID_);
+	playerID = playerID_;
 }
+
+int PlayerProjectile::PlayerID()
+{
+	return playerID;
+}
+
 
 void
 PlayerProjectile::Draw()
 {
 	if ( active )
 	{
-		SetSpriteUVCoordinates(SpriteSheet::Sprite(), uv);
-		MoveSprite(SpriteSheet::Sprite(), pos.x, pos.y);
-		DrawSprite(SpriteSheet::Sprite());
+		SetSpriteUVCoordinates(SpriteSheet::ProjectileSprite(), uv);
+		MoveSprite(SpriteSheet::ProjectileSprite(), pos.x, pos.y);
+		DrawSprite(SpriteSheet::ProjectileSprite());
 
 #ifdef SHOW_COLLIDERS
 		DrawRect(GetRect());
@@ -62,6 +72,10 @@ PlayerProjectile::Update(float delta_)
 {
 	if ( active ) 
 	{
+		//apply gravity
+		Vector2 gravityVec(0, PROJECTILE_GRAVITY);
+		velocity += gravityVec;
+
 		pos += velocity * delta_;
 	
 		//if it no longer collides with the screen, deactivate

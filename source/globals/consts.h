@@ -4,6 +4,7 @@
 
 //actual TILE_S is 16 (64 * 4)
 #define TILE_S 32
+#define PROJECTILE_SZ 32
 
 //actual PLAYER_S is 32 (32 * 4)
 #define PLAYER_S 64
@@ -24,3 +25,5 @@
 //#define TERR_SPR_ROWS TERR_SPRITESHEET_H / TERR_TILE_S
 
 #define DELTA 0.0166666666666666667f
+
+#define PROJECTILE_GRAVITY 12.0

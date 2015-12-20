@@ -36,6 +36,7 @@ public:
 	static SDL_Texture* FontSprite();
 	static SDL_Texture* PlayerSprite();
 	static SDL_Texture* PlatformSprite();
+	static SDL_Texture* ProjectileSprite();
 
 	static void FillUV(float* uv_, SPRITE_TYPE st_);
 
@@ -45,6 +46,7 @@ private:
 	static SDL_Texture* fontSprite;
 	static SDL_Texture* playerSprite;
 	static SDL_Texture* platformSprite;
+	static SDL_Texture* projectileSprite;
 	static bool init;
 	static UVTranslator translator;
 	SpriteSheet(void);

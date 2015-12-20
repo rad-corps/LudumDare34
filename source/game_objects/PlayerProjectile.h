@@ -11,9 +11,11 @@ public:
 	PlayerProjectile();
 	~PlayerProjectile();	
 
-	void Shoot(Vector2 pos_, Vector2 direction_);
+	void Shoot(Vector2 pos_, Vector2 direction_, int playerID_);
 	virtual void Draw();
 	void Update(float delta_);
+	int PlayerID();
+
 
 private:
 	
@@ -22,4 +24,5 @@ private:
 	static float uv[4];
 	static bool init;
 	SDL_Rect collider;
+	int playerID;
 };

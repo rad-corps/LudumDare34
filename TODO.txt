@@ -1,0 +1,15 @@
+TODO
+ - Limit number of projectiles (and show in GUI)
+ - Pick up used projectiles
+ - Player left/right velocity (accelleration)
+ - Player wall jumping
+ - Player stationary animation
+ - spawn from one of four random spawn points
+
+IN PROGRESS
+ - Projectile sprite size and hit detector size
+ - Projectile hit detection with terrain 
+
+DONE
+ - Projectile sprite
+ - Projectile Arc (PlayerProjectile::Update())
