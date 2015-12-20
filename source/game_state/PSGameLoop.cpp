@@ -74,11 +74,11 @@ void PSGameLoop::SpawnAllPlayers()
 	}
 
 	//randomise a spawn point and allocate it to player 1 .... 
-	int i = 0;
 	for (auto& player : players)
 	{
-		player->SetPos(spawnPoints[i]);
-		i++;
+		int num = rand() % spawnPoints.size();
+		player->SetPos(spawnPoints[num]);
+		spawnPoints.erase(spawnPoints.begin() + num);
 	}
 }
 
