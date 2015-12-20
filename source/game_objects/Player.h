@@ -99,5 +99,6 @@ private:
 	GLText guiText;
 	int kills;
 	int id;
+	int projectiles;
 };
 

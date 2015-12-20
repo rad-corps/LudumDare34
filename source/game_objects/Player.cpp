@@ -8,7 +8,7 @@
 
 
 Player::Player(int id_)
-	: kills(0), alive(true), id(id_)
+	: kills(0), alive(true), id(id_), projectiles(3)
 {
 //	gfx = GLAHGraphics::Instance();
 //	inpt = GLAHInput::Instance();
@@ -67,6 +67,8 @@ void Player::Reset()
 	hitCollider.h = PLAYER_S * FileSettings::GetFloat("SCALE_H");
 
 	UpdateColliders();
+
+	projectiles = 3;
 }
 
 Player::~Player(void)
@@ -149,8 +151,15 @@ void Player::HandleCollision(vector<Platform>& platform_, std::vector<PlayerProj
 		{
 			if (Collision::RectCollision(hitCollider, projectile.GetRect()))
 			{
-				cout << "Projectile Collided with player " << playerNum << endl; 
-				alive = false;
+				if (projectile.PlayerID() == id)
+				{
+					projectiles++;					
+					projectile.SetActive(false);
+				}
+				else
+				{
+					alive = false;
+				}				
 			}
 		}
 	}
@@ -249,10 +258,14 @@ void Player::HandleInput(float delta_)
 		cout << "SPACE PRESSED" << endl;
 		
 		//TODO REVISIT IMPORTANT SCALE PROJECTILE POSITION
-		if ( faceLeft )
-			playerProjectileListener->PlayerProjectileFired(pos - Vector2(64, 0), Vector2(-0.2, -0.2), id);
-		else
-			playerProjectileListener->PlayerProjectileFired(pos + Vector2(64, 0), Vector2(0.2, -0.2), id);
+		if (projectiles > 0)
+		{
+			--projectiles;
+			if (faceLeft)
+				playerProjectileListener->PlayerProjectileFired(pos - Vector2(64, 0), Vector2(-0.2, -0.2), id);
+			else
+				playerProjectileListener->PlayerProjectileFired(pos + Vector2(64, 0), Vector2(0.2, -0.2), id);
+		}
 
 	}
 	else if (!buttonDown[ SDL_CONTROLLER_BUTTON_X ])
@@ -364,7 +377,7 @@ void Player::Draw()
 
 	//update the text
 	stringstream str;
-	str << Name() << kills;
+	str << Name() << " - Kills: " << kills << "  Projectiles: " << projectiles;
 	guiText.SetText(str.str());
 	if ( playerNum == 0 )
 	{		
