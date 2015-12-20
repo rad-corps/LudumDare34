@@ -7,7 +7,7 @@
 #include "../globals/consts.h"
 #include "../math/Collision.h"
 
-float PlayerProjectile::uv[4];
+//float PlayerProjectile::uv[4];
 bool PlayerProjectile::init = false;
 
 using namespace std;
@@ -43,6 +43,7 @@ void PlayerProjectile::Shoot(Vector2 pos_, Vector2 direction_, int playerID_)
 	UVTranslator trans(64, 16, 16, 16);
 	trans.GetUV(uv, 0, playerID_);
 	playerID = playerID_;
+	collidedWithPlatform = false;
 }
 
 int PlayerProjectile::PlayerID()
@@ -68,21 +69,33 @@ PlayerProjectile::Draw()
 }
 
 void
-PlayerProjectile::Update(float delta_)
+PlayerProjectile::Update(float delta_, std::vector<Platform> platforms_)
 {
-	if ( active ) 
+	if (active && !collidedWithPlatform)
 	{
 		//apply gravity
 		Vector2 gravityVec(0, PROJECTILE_GRAVITY);
 		velocity += gravityVec;
 
 		pos += velocity * delta_;
-	
+
 		//if it no longer collides with the screen, deactivate
-		if ( !Collision::RectCollision(GetScreenRect(), GetRect() ) )
+		if (!Collision::RectCollision(GetScreenRect(), GetRect()))
 		{
 			cout << "PlayerProjectile left screen" << endl;
 			active = false;
+		}
+
+		//if the projectile collides with a platform
+		for (auto &platform : platforms_)
+		{
+			if (platform.HasCollider())
+			{
+				if (Collision::RectCollision(*platform.Collider(), GetRect()))
+				{
+					collidedWithPlatform = true;
+				}
+			}
 		}
 	}
 }

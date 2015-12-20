@@ -3,22 +3,22 @@
 #include "../math/Rect.h"
 #include "../GLAH/GLAHGraphics.h"
 #include "../GLAH/Vector.h"
-#include "PlayerProjectile.h"
 #include <vector>
 
 class Platform
 {
 
 public:
+	//Platform();
 	Platform(int col_, int row_, int tileType_);
 	~Platform(void);
 
 	void Draw(float alpha_ = 1.0f);
-	void Update(float delta_, std::vector<PlayerProjectile>& playerProjectiles_);
+	void Update(float delta_);
 
 	void Fall();
 	bool Active();
-
+	bool HasCollider();
 	void IncrementTileType();
 	void DecrementTileType();
 	void SetTileset(int);

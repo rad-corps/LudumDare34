@@ -103,10 +103,10 @@ ProgramState* PSGameLoop::Update(float delta_)
 
 	//update platforms
 	for ( auto &env : platforms )
-		env.Update(delta_, playerProjectiles);		
+		env.Update(delta_);		
 
 	for ( auto &projectiles : playerProjectiles)
-		projectiles.Update(delta_);
+		projectiles.Update(delta_, platforms);
 
 	return newProgramState;
 }

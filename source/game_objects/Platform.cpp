@@ -69,6 +69,13 @@ bool Platform::Active()
 	return active;
 }
 
+bool Platform::HasCollider()
+{
+	if (collider == nullptr)
+		return false;
+	return true;
+}
+
 void Platform::InitialiseGraphic()
 {
 	UVTranslator trans(TERR_SPRITESHEET_W,TERR_SPRITESHEET_H,TERR_TILE_S,TERR_TILE_S);
@@ -145,7 +152,7 @@ void Platform::Draw(float alpha_)
 #endif
 }
 
-void Platform::Update(float delta_, std::vector<PlayerProjectile>& playerProjectiles_)
+void Platform::Update(float delta_)
 {
 	//if ( !active ) 
 	//	return;

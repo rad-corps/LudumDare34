@@ -12,6 +12,7 @@
 #include "../GLAH/GLAHGraphics.h"
 #include "../listeners/PlayerProjectileListener.h"
 #include "../sqlite/DatabaseManager.h"
+#include "PlayerProjectile.h"
 #include "../GLAH/InputListener.h"
 
 
