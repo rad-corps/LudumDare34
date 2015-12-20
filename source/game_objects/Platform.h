@@ -26,10 +26,13 @@ public:
 
 	int Row();
 	int Col();
+	int X();
+	int Y();
+
 
 	float* UV();
-
-	int x, y, w, h;
+	void SetPos(int row_, int col_);
+	
 
 	SDL_Rect* Collider();
 
@@ -42,7 +45,7 @@ private:
 	int row, col;
 	bool isFalling;
 	bool active;
-
+	int x, y, w, h;
 	SDL_Rect* collider;
 
 //	GLAHGraphics * gfx;

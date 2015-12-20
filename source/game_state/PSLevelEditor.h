@@ -54,7 +54,7 @@ private:
 
 
 	float uv[4];
-	Vector2 pos;
+	//Vector2 pos;
 
 	std::vector<Platform> platforms;	
 	

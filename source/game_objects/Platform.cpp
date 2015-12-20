@@ -41,6 +41,24 @@ Platform::~Platform(void)
 {
 }
 
+int Platform::X()
+{
+	return x;
+}
+
+int Platform::Y()
+{
+	return y;
+}
+
+void Platform::SetPos(int row_, int col_)
+{
+	//w = TILE_S * FileSettings::GetFloat("SCALE_W");
+	//h = TILE_S * FileSettings::GetFloat("SCALE_H");
+	x = col_ * w;
+	y = row_ * h;
+}
+
 float* Platform::UV()
 {
 	return uv;

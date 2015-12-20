@@ -115,7 +115,7 @@ void Player::HandleCollision(vector<Platform>& platform_, std::vector<PlayerProj
 					onPlatform = true;
 					velocity.y = 0;
 					//push him back up to the top of the platform
-					MoveTo(Vector2(pos.x, env.y - (PLAYER_S * FileSettings::GetFloat("SCALE_H"))));
+					MoveTo(Vector2(pos.x, env.Y() - (PLAYER_S * FileSettings::GetFloat("SCALE_H"))));
 				}
 			}
 

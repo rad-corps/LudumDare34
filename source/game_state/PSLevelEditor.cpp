@@ -198,38 +198,6 @@ void PSLevelEditor::KeyDown(SDL_Keycode key_)
 	if( key_ == SDLK_LEFT)		--col;
 	if( key_ == SDLK_RIGHT) 	++col;
 	if ( key_ == SDLK_SPACE )	SetPlatformTile();
-//	if ( key_ == SDLK_o )		cannon.SetPos(col, row);
-//	if ( key_ == SDLK_p)		player.SetPos(col, row);
-//	if ( key_ == SDLK_g )		goal.SetPos(col, row);
-//	if ( key_ == SDLK_1 )		currentPlatform->SetTileset(ENVIRO_TILE::PLATFORMS_START);
-//	if ( key_ == SDLK_2 )		currentPlatform->SetTileset(ENVIRO_TILE::DECORATION_BEGIN);
-	if ( key_ == SDLK_i )		showInstructions = !showInstructions;
-
-	//	if ( y_ > 0 )
-//	{
-//		currentPlatform->DecrementTileType();
-//	}
-//	else if ( y_ < 0 )
-//	{
-//		currentPlatform->IncrementTileType();		
-//	}	
-	
-	////drop an enemy spawner
-	//if ( key_ == SDLK_e )
-	//{
-	//	//find enemySpawner tile at this space.
-	//	auto it = find_if(enemySpawners.begin(), enemySpawners.end(), FindMatchingEnemySpawner);
-	//	
-	//	//if found, we want to set this platform to the next tile
-	//	if ( it != enemySpawners.end() )
-	//	{
-	//		it = enemySpawners.erase(it);
-	//	}
-	//	else //if no tiles found, add a new one. 
-	//	{
-	//		enemySpawners.push_back(EnemySpawner(Enemy(ENEMY_TYPE::SKELETON, DIRECTION::DIR_LEFT, col, row)));
-	//	}
-	//}
 
 	if ( key_ == SDLK_ESCAPE )
 	{
@@ -283,9 +251,7 @@ void PSLevelEditor::HandleMouseDown()
 }
 
 ProgramState* PSLevelEditor::Update(float delta_)
-{
-	pos = Vector2(col * FileSettings::GetFloat("SCALE_W") * TILE_S, row * FileSettings::GetFloat("SCALE_H") * TILE_S);
-	
+{	
 	UpdateRowCol();
 	HandleMouseDown();
 
@@ -320,12 +286,12 @@ void PSLevelEditor::Draw()
 	for ( auto &env : platforms ) env.Draw();
 	//for ( auto &spawner : enemySpawners ) spawner.Draw();
 	//cannon.Draw();
-//	player.Draw();
+//	player.Draw();;
 //	goal.Draw();
 	
-
-	currentPlatform->x = pos.x;
-	currentPlatform->y = pos.y;
+	currentPlatform->SetPos(row, col);
+	//currentPlatform->x = col * TILE_S * FileSettings::GetFloat("SCALE_W");
+	//currentPlatform->y = row * TILE_S * FileSettings::GetFloat("SCALE_H");
 	currentPlatform->Draw(0.3f);
 	//SetSpriteUVCoordinates(SpriteSheet::Sprite(), uv);
 	//MoveSprite(SpriteSheet::Sprite(), pos.x, pos.y);
