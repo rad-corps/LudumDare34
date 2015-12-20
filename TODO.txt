@@ -1,13 +1,15 @@
 TODO
+ - Database drive the projectile initial velocity/gravity
  - Player left/right velocity (accelleration)
  - Player wall jumping
  - Player stationary animation
 
 
 IN PROGRESS
- - spawn from one of four random spawn points
+
 
 DONE
+ - spawn from one of four random spawn points
  - Limit number of projectiles (and show in GUI)
  - Pick up used projectiles
  - Projectile hit detection with terrain (PlayerProjectile::Update())
