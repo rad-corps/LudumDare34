@@ -43,6 +43,8 @@ PSGameLoop::PSGameLoop(int level_, std::vector<Player*> players_)
 	}
 
 	SetDrawColour(89, 141, 179);	
+
+	SpawnAllPlayers();
 }
 
 
@@ -55,6 +57,29 @@ PSGameLoop::~PSGameLoop(void)
 	}
 
 	ClearGamePads();
+}
+
+void PSGameLoop::SpawnAllPlayers()
+{
+
+	//determine where the spawn point positions are
+	std::vector<Vector2> spawnPoints;
+
+	for (auto& platform : platforms)
+	{
+		if (platform.TileType() == 4)
+		{
+			spawnPoints.push_back(Vector2(platform.X(), platform.Y() - 50));
+		}
+	}
+
+	//randomise a spawn point and allocate it to player 1 .... 
+	int i = 0;
+	for (auto& player : players)
+	{
+		player->SetPos(spawnPoints[i]);
+		i++;
+	}
 }
 
 void PSGameLoop::KeyDown(SDL_Keycode key_)
@@ -83,6 +108,7 @@ ProgramState* PSGameLoop::Update(float delta_)
 			for (auto &player : players)
 			{
 				player->Reset();
+				SpawnAllPlayers();
 				gameOverTimer = 0.0f;
 			}
 		}

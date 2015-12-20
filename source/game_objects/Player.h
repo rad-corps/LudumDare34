@@ -37,6 +37,8 @@ public:
 	virtual void GamePadButtonDown(SDL_GameControllerButton button_);
 	virtual void GamePadButtonUp(SDL_GameControllerButton button_);
 
+	void SetPos(Vector2 pos_);
+
 	std::string Name();
 
 	int ID();

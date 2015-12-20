@@ -35,6 +35,8 @@ public:
 	virtual void GamePadButtonDown(SDL_GameControllerButton button_);
 
 private:
+	
+	void SpawnAllPlayers();
 	//float updateInterval;
 	float gameTimer;
 	

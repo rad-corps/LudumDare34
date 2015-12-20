@@ -46,6 +46,11 @@ Player::Player(int id_)
 	terminalVelocity = dm.GetValueFloat(0, "terminal_velocity");	
 }
 
+void Player::SetPos(Vector2 pos_)
+{
+	pos = pos_;
+}
+
 void Player::Reset()
 {
 	alive = true;
