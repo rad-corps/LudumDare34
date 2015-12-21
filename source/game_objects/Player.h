@@ -78,6 +78,8 @@ private:
 	float FPS;
 
 	bool onPlatform;
+	bool canWallJumpLeft;
+	bool canWallJumpRight;
 	bool faceLeft;
 	bool alive;
 	bool jumpHeld;

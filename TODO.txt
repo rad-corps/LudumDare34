@@ -1,14 +1,20 @@
 TODO
  - Database drive the projectile initial velocity/gravity
- - Player left/right velocity (accelleration)
- - Player wall jumping
  - Player stationary animation
-
+ - show player score
+ - end game on 3? 5?
+ - unhardcode 20 projectiles on screen
+ - player falls out of level
+ - bullets out of screen to not get garbage collected (300px out of screen)
+ - aiming projectiles? 
 
 IN PROGRESS
 
 
 DONE
+ - set x velocity to 0 when not running and on ground
+ - Player wall jumping
+ - Player left/right velocity (accelleration)
  - spawn from one of four random spawn points
  - Limit number of projectiles (and show in GUI)
  - Pick up used projectiles

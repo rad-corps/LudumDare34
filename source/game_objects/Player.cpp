@@ -8,7 +8,7 @@
 
 
 Player::Player(int id_)
-	: kills(0), alive(true), id(id_), projectiles(3)
+	: kills(0), alive(true), id(id_), projectiles(3), canWallJumpLeft(false), canWallJumpRight(false)
 {
 //	gfx = GLAHGraphics::Instance();
 //	inpt = GLAHInput::Instance();
@@ -61,13 +61,13 @@ void Player::Reset()
 	////initialise colliders
 	topCollider.w = COLLIDER_SZ;
 	topCollider.h = COLLIDER_SZ;
-	bottomCollider.w = COLLIDER_SZ;
+	bottomCollider.w = PLAYER_S * FileSettings::GetFloat("SCALE_W") * 0.50f;;
 	bottomCollider.h = COLLIDER_SZ;
 
 	leftCollider.w = COLLIDER_SZ;
-	leftCollider.h = COLLIDER_SZ;
+	leftCollider.h = PLAYER_S * FileSettings::GetFloat("SCALE_H") * 0.50f;
 	rightCollider.w = COLLIDER_SZ;
-	rightCollider.h = COLLIDER_SZ;
+	rightCollider.h = PLAYER_S * FileSettings::GetFloat("SCALE_H") * 0.50f;
 	hitCollider.w = PLAYER_S * FileSettings::GetFloat("SCALE_W");
 	hitCollider.h = PLAYER_S * FileSettings::GetFloat("SCALE_H");
 
@@ -92,13 +92,12 @@ void Player::UpdateColliders()
 	//update colliders
 	topCollider.x = pos.x + (PLAYER_S * FileSettings::GetFloat("SCALE_W"))* 0.5f;
 	topCollider.y = pos.y;
-	bottomCollider.x = pos.x + (PLAYER_S * FileSettings::GetFloat("SCALE_W")) * 0.5f;
+	bottomCollider.x = pos.x + (PLAYER_S * FileSettings::GetFloat("SCALE_W")) * 0.25f;
 	bottomCollider.y = pos.y + (PLAYER_S * FileSettings::GetFloat("SCALE_H")) + 3;
 	leftCollider.x = pos.x;
-	leftCollider.y = pos.y + (PLAYER_S * FileSettings::GetFloat("SCALE_H")) * 0.5f;
-	rightCollider.x = pos.x + (PLAYER_S * FileSettings::GetFloat("SCALE_W"));
-	rightCollider.y = pos.y + (PLAYER_S * FileSettings::GetFloat("SCALE_H")) * 0.5f;
-
+	leftCollider.y = pos.y + (PLAYER_S * FileSettings::GetFloat("SCALE_H") * 0.25f);
+	rightCollider.x = pos.x + (PLAYER_S * FileSettings::GetFloat("SCALE_W")) - COLLIDER_SZ;
+	rightCollider.y = pos.y + (PLAYER_S * FileSettings::GetFloat("SCALE_H") * 0.25f);
 
 	hitCollider.x = pos.x;
 	hitCollider.y = pos.y;
@@ -109,6 +108,9 @@ void Player::HandleCollision(vector<Platform>& platform_, std::vector<PlayerProj
 	//bool tempOnPlatform = false;
 	onPlatform = false;
 	//check collision	
+
+	canWallJumpRight = false;
+	canWallJumpLeft = false;
 	for ( auto &env : platform_ )
 	{
 		if ( env.Active() && env.Collider() != nullptr)
@@ -131,14 +133,18 @@ void Player::HandleCollision(vector<Platform>& platform_, std::vector<PlayerProj
 			{
 				if ( Collision::RectCollision(leftCollider, *env.Collider()))
 				{
-					UndoX();
-					pos.x += 1;
+					velocity.x = 0;
+					MoveTo(Vector2(env.X() + (TILE_S * FileSettings::GetFloat("SCALE_W")), pos.y));
+					canWallJumpRight = true;
 				}
-				if ( Collision::RectCollision(rightCollider, *env.Collider()))
+				else if ( Collision::RectCollision(rightCollider, *env.Collider()))
 				{
-					UndoX();
-					pos.x -= 1;
+					velocity.x = 0;
+					MoveTo(Vector2(env.X() - (PLAYER_S * FileSettings::GetFloat("SCALE_W")), pos.y));
+					canWallJumpLeft = true;
+					//cout << "canWallJumpLeft: " << canWallJumpLeft << endl;
 				}
+
 
 				if ( Collision::RectCollision(topCollider, *env.Collider()))
 				{
@@ -210,13 +216,13 @@ void Player::ApplyGravity()
 
 void Player::GamePadButtonDown(SDL_GameControllerButton button_)
 {
-	cout << "GamePadButtonDown" << endl;
+	//cout << "GamePadButtonDown" << endl;
 	buttonDown[button_] = true;
 }
 
 void Player::GamePadButtonUp(SDL_GameControllerButton button_)
 {
-	cout << "GamePadButtonUp" << endl;
+	//cout << "GamePadButtonUp" << endl;
 	buttonDown[button_] = false;
 }
 
@@ -225,18 +231,36 @@ void Player::HandleInput(float delta_)
 	if ( buttonDown[ SDL_CONTROLLER_BUTTON_DPAD_LEFT ] )
 	{
 		faceLeft = true;
-		pos.x -= maxSpeed * delta_;
+		velocity.x -= accelleration;
 		if ( onPlatform ) 
 			status = RUNNING;
 	}
 	else if ( buttonDown[ SDL_CONTROLLER_BUTTON_DPAD_RIGHT ] )
 	{
 		faceLeft = false;
-		pos.x += maxSpeed * delta_;
+		velocity.x += accelleration;
 		
 		if ( onPlatform ) 
 			status = RUNNING;
 	}
+	else if (onPlatform)
+	{
+		velocity.x = 0.0f;
+	}
+	else if (!onPlatform)//drag
+	{
+		velocity.x *= 0.8f;
+	}
+
+	if (velocity.x > maxSpeed )
+	{
+		velocity.x = maxSpeed;
+	}
+	if (velocity.x < -maxSpeed)
+	{
+		velocity.x = -maxSpeed;
+	}
+
 	else if ( onPlatform ) 
 	{
 		status = STATIONARY;
@@ -251,6 +275,28 @@ void Player::HandleInput(float delta_)
 		//will only happen for one frame
 		velocity.y -= jumpForce;
 	}
+	
+	//walljumping
+	if (buttonDown[SDL_CONTROLLER_BUTTON_A] && canWallJumpLeft && !jumpHeld)
+	{
+		jumpHeld = true;
+		status = JUMPING;
+
+		//will only happen for one frame
+		velocity.y = -jumpForce;
+		velocity.x = -maxSpeed;
+		canWallJumpLeft = false;
+	}
+	if (buttonDown[SDL_CONTROLLER_BUTTON_A] && canWallJumpRight&& !jumpHeld)
+	{
+		jumpHeld = true;
+		status = JUMPING;
+
+		//will only happen for one frame
+		velocity.y = -jumpForce;
+		velocity.x = maxSpeed;
+		canWallJumpRight = false;
+	}
 
 	if ( !buttonDown[ SDL_CONTROLLER_BUTTON_A ] )
 	{
@@ -260,7 +306,6 @@ void Player::HandleInput(float delta_)
 	if ( buttonDown[ SDL_CONTROLLER_BUTTON_X ] && shootHeld == false )
 	{
 		shootHeld = true;
-		cout << "SPACE PRESSED" << endl;
 		
 		//TODO REVISIT IMPORTANT SCALE PROJECTILE POSITION
 		if (projectiles > 0)

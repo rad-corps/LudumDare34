@@ -116,8 +116,12 @@ int Initialise(int a_iWidth, int a_iHeight, bool a_bFullscreen, const char* a_pW
 		int should_be_zero = SDL_GetCurrentDisplayMode(0, &displayMode);
 		FileSettings::AddIntValue("SCREEN_W", displayMode.w);
 		FileSettings::AddIntValue("SCREEN_H", displayMode.h);
-		float scale_w = (float)displayMode.w / BASE_W;
-		float scale_h = (float)displayMode.h / BASE_H;
+		
+		//just for debugging
+		//FileSettings::AddIntValue("SCREEN_W", 800);
+		//FileSettings::AddIntValue("SCREEN_H", 600);
+		float scale_w = (float)FileSettings::GetInt("SCREEN_W") / BASE_W;
+		float scale_h = (float)FileSettings::GetInt("SCREEN_H") / BASE_H;
 		FileSettings::AddFloatValue("SCALE_W", scale_w);
 		FileSettings::AddFloatValue("SCALE_H", scale_h);
 		
@@ -341,8 +345,6 @@ bool FrameworkUpdate()
 		}
 		else if( e.type == SDL_CONTROLLERBUTTONDOWN )
         {   
-			cout << e.cdevice.which << endl;
-
 			//gcButtonDownList[(SDL_GameControllerButton)e.cbutton.button] = true;
 			if ( gameControllerListeners[e.cdevice.which] != nullptr ) 
 			{
