@@ -7,15 +7,15 @@ TODO
  - bullets out of screen to not get garbage collected (300px out of screen)
  - show player kills between rounds
  - pause screen (GAMELOOPSTATE: GLS_PLAY, GLS_PAUSE, GLS_SHOWKILLS )
-
+ - on screen logger
 
 IN PROGRESS
 
  - Database drive the projectile initial velocity/gravity
- - aiming projectiles? 
  - jumping bug (retapping a while in air)
 
 DONE
+ - aiming projectiles? 
  - show player projectiles above their head
  - set x velocity to 0 when not running and on ground
  - Player wall jumping
