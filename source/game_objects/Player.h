@@ -99,8 +99,8 @@ private:
 
 	std::map<SDL_GameControllerButton, bool> buttonDown;
 
-	int playerNum;
-	GLText guiText;
+	//int playerNum;
+	//GLText guiText;
 	int kills;
 	int id;
 	int projectiles;

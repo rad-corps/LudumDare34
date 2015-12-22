@@ -13,7 +13,7 @@ Player::Player(int id_)
 //	gfx = GLAHGraphics::Instance();
 //	inpt = GLAHInput::Instance();
 	AddGameControllerListener(this, id);
-	playerNum = id;
+//	playerNum = id;
 
 	Reset();
 
@@ -22,11 +22,11 @@ Player::Player(int id_)
 
 	//initialise animations
 	UVTranslator translator(512, 512, 32, 32);
-	translator.GetUV(animStationary, playerNum, 0);
-	translator.GetUV(animMove1, playerNum, 1);
-	translator.GetUV(animMove2, playerNum, 2);
-	translator.GetUV(animMove3, playerNum, 3);
-	translator.GetUV(animDead, playerNum, 4);
+	translator.GetUV(animStationary, id, 0);
+	translator.GetUV(animMove1, id, 1);
+	translator.GetUV(animMove2, id, 2);
+	translator.GetUV(animMove3, id, 3);
+	translator.GetUV(animDead, id, 4);
 	
 	currentAnimation = animStationary;
 
@@ -360,24 +360,6 @@ void Player::UpdateAnimation(float delta_)
 
 }
 
-bool Player::Update(float delta_, vector<Platform>& platform_, std::vector<PlayerProjectile>& projectiles_ )
-{
-	prevX = pos.x;
-	prevY = pos.y;
-	
-	if (alive)
-		HandleInput(delta_);
-
-	ApplyGravity();	
-	ApplyVelocity(velocity);	
-	playerSpeak.SetPos(pos);
-	HandleCollision(platform_, projectiles_);
-	UpdateAnimation(delta_);
-
-	if (alive)
-		return true;
-	return false;
-}
 
 void Player::MoveTo(Vector2 pos_)
 {
@@ -397,25 +379,46 @@ void Player::ApplyVelocity(Vector2 velocity_)
 }
 
 std::string Player::Name()
-{ 
-	if (playerNum == 0)
+{
+	if (id == 0)
 	{
 		return "Glen";
 	}
-	if (playerNum == 1)
+	if (id == 1)
 	{
 		return "John";
 	}
-	if (playerNum == 2)
+	if (id == 2)
 	{
 		return "Rex";
 	}
-	if (playerNum == 3)
+	if (id == 3)
 	{
 		return "Paul";
 	}
 	return "Invalid playerNum";
 }
+
+//UPDATE AND DRAW FUNCTIONS
+bool Player::Update(float delta_, vector<Platform>& platform_, std::vector<PlayerProjectile>& projectiles_ )
+{
+	prevX = pos.x;
+	prevY = pos.y;
+	
+	if (alive)
+		HandleInput(delta_);
+
+	ApplyGravity();	
+	ApplyVelocity(velocity);	
+	playerSpeak.SetPos(pos + Vector2(13, -15));
+	HandleCollision(platform_, projectiles_);
+	UpdateAnimation(delta_);
+
+	if (alive)
+		return true;
+	return false;
+}
+
 
 void Player::Draw()
 {
@@ -423,34 +426,6 @@ void Player::Draw()
 	SetSpriteUVCoordinates	( SpriteSheet::PlayerSprite(), currentAnimation);
 	MoveSprite(SpriteSheet::PlayerSprite(), pos.x, pos.y);
 	DrawSprite(SpriteSheet::PlayerSprite(), faceLeft, 1.0f, true);
-	//DrawString(to_string(FPS).c_str(), 50, 500);
-
-	//update the text
-	stringstream str;
-	str << Name() << " - Kills: " << kills << "  Projectiles: " << projectiles;
-	guiText.SetText(str.str());
-	if ( playerNum == 0 )
-	{		
-		guiText.SetPos(Vector2(50, 25));
-		guiText.SetAlignment(TEXT_ALIGNMENT::ALIGN_LEFT);
-	}
-	if ( playerNum == 1)
-	{
-		guiText.SetPos(Vector2(FileSettings::GetInt("SCREEN_W")-50, 25));
-		guiText.SetAlignment(TEXT_ALIGNMENT::ALIGN_RIGHT);
-	}
-	if (playerNum == 2)
-	{
-		guiText.SetPos(Vector2(50, FileSettings::GetInt("SCREEN_H") - 50));
-		guiText.SetAlignment(TEXT_ALIGNMENT::ALIGN_LEFT);
-	}
-	if (playerNum == 3)
-	{
-		guiText.SetPos(Vector2(FileSettings::GetInt("SCREEN_W"), FileSettings::GetInt("SCREEN_H") - 50));
-		guiText.SetAlignment(TEXT_ALIGNMENT::ALIGN_RIGHT);
-	}
-
-	guiText.Draw();
 
 #ifdef SHOW_COLLIDERS
 	DrawRect(bottomCollider);
@@ -459,6 +434,7 @@ void Player::Draw()
 	DrawRect(topCollider);
 	DrawRect(hitCollider);	
 #endif
-
+	
+	playerSpeak.SetText(to_string(projectiles));
 	playerSpeak.Draw();
 }

@@ -1,17 +1,22 @@
 TODO
- - Database drive the projectile initial velocity/gravity
  - Player stationary animation
  - show player score
  - end game on 3? 5?
  - unhardcode 20 projectiles on screen
- - player falls out of level
+ - player falls out of level (add a ceiling?)
  - bullets out of screen to not get garbage collected (300px out of screen)
- - aiming projectiles? 
+ - show player kills between rounds
+ - pause screen (GAMELOOPSTATE: GLS_PLAY, GLS_PAUSE, GLS_SHOWKILLS )
+
 
 IN PROGRESS
 
+ - Database drive the projectile initial velocity/gravity
+ - aiming projectiles? 
+ - jumping bug (retapping a while in air)
 
 DONE
+ - show player projectiles above their head
  - set x velocity to 0 when not running and on ground
  - Player wall jumping
  - Player left/right velocity (accelleration)
