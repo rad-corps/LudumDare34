@@ -56,7 +56,7 @@ PSGameLoop::~PSGameLoop(void)
 		delete player;
 	}
 
-	ClearGamePads();
+//	ClearGamePads();
 }
 
 void PSGameLoop::SpawnAllPlayers()

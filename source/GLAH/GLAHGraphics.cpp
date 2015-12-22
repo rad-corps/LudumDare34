@@ -43,11 +43,14 @@ int r, g, b;
 std::map<SDL_Texture*, GLAHEntity> spriteList;
 
 //gamepads
-vector<SDL_GameController*> gGameController;
+//vector<SDL_GameController*> gGameController;
+vector<int> joystickID; //subscript is player ID
+std::vector<GameControllerListener*> gameControllerListeners;
+map<int, GameControllerListener*> joyIDToGCListener;
 //const int JOYSTICK_DEAD_ZONE = 8000;
 
 InputListener* inputListener;
-std::vector<GameControllerListener*> gameControllerListeners;
+
 
 //GLFWwindow* window;
 
@@ -76,33 +79,40 @@ std::chrono::time_point<high_resolution_clock> timeEnd;
 
 double delta;
 
-void LoadAllGamePads()
-{
-	gGameController.clear();
+//void LoadAllGamePads()
+//{
+//	gGameController.resize(4);
+//	gGameController.clear();
+//
+//	//load gamepads
+//	for ( int i = 0; i < SDL_NumJoysticks(); ++i )
+//    {
+//        gGameController.push_back(SDL_GameControllerOpen( i ));
+//			
+//		if( gGameController[i] == NULL )
+//        {
+//            printf( "Warning: Unable to open game controller! SDL Error: %s\n", SDL_GetError() );
+//        }
+//    }
+//}
 
-	//load gamepads
-	for ( int i = 0; i < SDL_NumJoysticks(); ++i )
-    {
-        gGameController.push_back(SDL_GameControllerOpen( i ));
-			
-		if( gGameController[i] == NULL )
-        {
-            printf( "Warning: Unable to open game controller! SDL Error: %s\n", SDL_GetError() );
-        }
-    }
-}
 
-
-void ClearGamePads()
-{
-	gGameController.clear();
-}
+//void ClearGamePads()
+//{
+//	gGameController.clear();
+//}
 
 int Initialise(int a_iWidth, int a_iHeight, bool a_bFullscreen, const char* a_pWindowTitle  )
 {
-	
-
 	gameControllerListeners.resize(4); //max of 4 controllers.
+//	gGameController.resize(4);
+
+	joystickID.resize(4);
+	for (int i = 0; i < 4; ++i)
+		joystickID[i] = -1;
+
+	
+	
 
     //Initialize SDL
     if( SDL_Init( SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER   ) < 0 )
@@ -188,9 +198,16 @@ void			AddInputListener(InputListener* inputListener_)
 	inputListener = inputListener_;
 }
 
-void			AddGameControllerListener(GameControllerListener* listener_, int controllerID_)
+void			AddGameControllerListener(GameControllerListener* listener_, int playerID_)
 {
-	gameControllerListeners[controllerID_] = listener_;
+	gameControllerListeners[playerID_] = listener_;
+	joyIDToGCListener[joystickID[playerID_]] = listener_;
+}
+
+void			RemoveGameControllerListener(GameControllerListener* listener)
+{
+	cout << "not yet implemented" << endl;
+	//gameControllerListeners[controllerID_] = nullptr;
 }
 
 void			RemoveInputListener()
@@ -339,24 +356,57 @@ bool FrameworkUpdate()
         {
             quit = true;
         }
-		if (e.type == SDL_JOYDEVICEREMOVED )
-		{
-			cout << "SDL_JOYDEVICEREMOVED" << endl;
+		if (e.type == SDL_CONTROLLERDEVICEREMOVED)
+		{			
+			//gameControllerListeners[e.cdevice.which] = nullptr;
+			//SDL_GameControllerClose(gGameController[e.cdevice.which]);
+			//gGameController[e.cdevice.which] = nullptr;
+			
+			for (int i = 0; i < 4; ++i)
+			{
+				if (joystickID[i] == e.cdevice.which)
+				{
+					joystickID[i] = -1;
+				}
+			}
+
+
+			auto it = joyIDToGCListener.find(e.cdevice.which);
+			joyIDToGCListener.erase(it);
 		}
+		if (e.type == SDL_CONTROLLERDEVICEADDED)
+		{
+			//e.cdevice.which is not the same ID as when it was removed. so search for first available 
+			//gGameController element and add to that
+
+			SDL_GameController* gameController = SDL_GameControllerOpen(e.cdevice.which);
+
+			if (gameController == NULL)
+			{
+				printf( "Warning: Unable to open game controller! SDL Error: %s\n", SDL_GetError() );
+			}
+					
+			//find first available joystickID;
+			for (int j = 0; j < 4; ++j)
+			{
+				if (joystickID[j] == -1)
+				{
+					//we also need the joystick ID
+					SDL_Joystick *joy = SDL_GameControllerGetJoystick(gameController);
+					joystickID[j] = SDL_JoystickInstanceID(joy);
+					joyIDToGCListener[joystickID[j]] = gameControllerListeners[j];
+					break;
+				}
+			}				
+		}
+		
 		else if( e.type == SDL_CONTROLLERBUTTONDOWN )
         {   
-			//gcButtonDownList[(SDL_GameControllerButton)e.cbutton.button] = true;
-			if ( gameControllerListeners[e.cdevice.which] != nullptr ) 
-			{
-				gameControllerListeners[e.cdevice.which]->GamePadButtonDown((SDL_GameControllerButton)e.cbutton.button);
-			}
+			joyIDToGCListener[e.cdevice.which]->GamePadButtonDown((SDL_GameControllerButton)e.cbutton.button);			
 		}
 		else if( e.type == SDL_CONTROLLERBUTTONUP )
         {   
-			if ( gameControllerListeners[e.cdevice.which] != nullptr )
-			{
-				gameControllerListeners[e.cdevice.which]->GamePadButtonUp((SDL_GameControllerButton)e.cbutton.button);
-			}
+			joyIDToGCListener[e.cdevice.which]->GamePadButtonUp((SDL_GameControllerButton)e.cbutton.button);			
 		}
 		else if ( e.type == SDL_KEYDOWN ) 
 		{

@@ -10,10 +10,7 @@
 Player::Player(int id_)
 	: kills(0), alive(true), id(id_), projectiles(3), canWallJumpLeft(false), canWallJumpRight(false)
 {
-//	gfx = GLAHGraphics::Instance();
-//	inpt = GLAHInput::Instance();
 	AddGameControllerListener(this, id);
-//	playerNum = id;
 
 	Reset();
 
@@ -78,6 +75,7 @@ void Player::Reset()
 
 Player::~Player(void)
 {
+	RemoveGameControllerListener(this);
 }
 
 void Player::InitListener(PlayerProjectileListener* playerProjectileListener_)

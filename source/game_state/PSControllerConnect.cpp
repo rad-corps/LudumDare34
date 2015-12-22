@@ -27,7 +27,7 @@ PSControllerConnect::~PSControllerConnect(void)
 
 void PSControllerConnect::KeyDown(SDL_Keycode key_)
 {
-	LoadAllGamePads();
+//	LoadAllGamePads();
 
 	//create a player for each control detected. 
 	for ( int i = 0; i < SDL_NumJoysticks(); ++i ) 

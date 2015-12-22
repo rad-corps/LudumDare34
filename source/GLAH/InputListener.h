@@ -15,4 +15,5 @@ class GameControllerListener
 public: 
 	virtual void GamePadButtonDown(SDL_GameControllerButton button_) = 0;
 	virtual void GamePadButtonUp(SDL_GameControllerButton button_) = 0;
+
 };

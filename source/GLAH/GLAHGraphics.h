@@ -15,8 +15,12 @@ using namespace std;
 
 	//input handling
 void			AddInputListener(InputListener* inputListener_);
-void			AddGameControllerListener(GameControllerListener* listener_, int controllerID_);
+void			AddGameControllerListener(GameControllerListener* listener_, int playerID_);
+void			RemoveGameControllerListener(GameControllerListener* listener);
 void			RemoveInputListener();
+
+//void			LoadAllGamePads();
+//void			ClearGamePads();
 
  bool			IsKeyDown( SDL_Keycode a_iKey );
  //bool			IsGamePadButtonDown(SDL_GameControllerButton button_);
@@ -75,8 +79,7 @@ void			RemoveInputListener();
 
 	bool			FrameworkUpdate();
 
-	void			LoadAllGamePads();
-	void			ClearGamePads();
+
 
 	int				Initialise( int a_iWidth, int a_iHeight, bool a_bFullscreen = false, const char* a_pWindowTitle = nullptr );
 

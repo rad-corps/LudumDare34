@@ -8,11 +8,13 @@ TODO
  - show player kills between rounds
  - pause screen (GAMELOOPSTATE: GLS_PLAY, GLS_PAUSE, GLS_SHOWKILLS )
  - on screen logger
+ - remove onPlatform from Player (run from enum states - set in HandleCollision)
+
 
 IN PROGRESS
-
+ - gamepad game crashes
  - Database drive the projectile initial velocity/gravity
- - jumping bug (retapping a while in air)
+ - jumping bug (retapping 'a' while in air)
 
 DONE
  - aiming projectiles? 
