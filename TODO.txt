@@ -9,14 +9,18 @@ TODO
  - pause screen (GAMELOOPSTATE: GLS_PLAY, GLS_PAUSE, GLS_SHOWKILLS )
  - on screen logger
  - remove onPlatform from Player (run from enum states - set in HandleCollision)
-
+ - death animation
+ - player x velocity stops on death
+ - Database drive the projectile initial velocity/gravity
+ - make database driven vars static. add reload method.
+ - get prez to break menu then fix
 
 IN PROGRESS
- - gamepad game crashes
- - Database drive the projectile initial velocity/gravity
- - jumping bug (retapping 'a' while in air)
+
 
 DONE
+ - jumping bug (retapping 'a' while in air)
+ - gamepad game crashes
  - aiming projectiles? 
  - show player projectiles above their head
  - set x velocity to 0 when not running and on ground

@@ -130,6 +130,7 @@ int Initialise(int a_iWidth, int a_iHeight, bool a_bFullscreen, const char* a_pW
 		//just for debugging
 		//FileSettings::AddIntValue("SCREEN_W", 800);
 		//FileSettings::AddIntValue("SCREEN_H", 600);
+		
 		float scale_w = (float)FileSettings::GetInt("SCREEN_W") / BASE_W;
 		float scale_h = (float)FileSettings::GetInt("SCREEN_H") / BASE_H;
 		FileSettings::AddFloatValue("SCALE_W", scale_w);

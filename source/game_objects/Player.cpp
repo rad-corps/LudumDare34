@@ -114,7 +114,7 @@ void Player::HandleCollision(vector<Platform>& platform_, std::vector<PlayerProj
 		if ( env.Active() && env.Collider() != nullptr)
 		{			
 			//only check bottom collision with platform if we are falling. 			
-			if ( velocity.y > 0.1f ) 
+			if ( velocity.y > -0.1f ) 
 			{
 				if ( Collision::RectCollision(bottomCollider, *env.Collider()))
 				{
@@ -216,6 +216,11 @@ void Player::GamePadButtonDown(SDL_GameControllerButton button_)
 {
 	//cout << "GamePadButtonDown" << endl;
 	buttonDown[button_] = true;
+
+	if (button_ == SDL_CONTROLLER_BUTTON_A)
+	{
+		system("CLS");
+	}
 }
 
 void Player::GamePadButtonUp(SDL_GameControllerButton button_)
@@ -226,11 +231,6 @@ void Player::GamePadButtonUp(SDL_GameControllerButton button_)
 
 void Player::HandleInput(float delta_)
 {
-	if (id == 0)
-	{
-
-	}
-
 	if ( buttonDown[ SDL_CONTROLLER_BUTTON_DPAD_LEFT ] )
 	{
 		faceLeft = true;
@@ -270,8 +270,31 @@ void Player::HandleInput(float delta_)
 	}
 
 	//only jump if not already jumping
+	if (buttonDown[SDL_CONTROLLER_BUTTON_A])
+	{
+		
+		cout << endl << "SDL_CONTROLLER_BUTTON_A" << endl;
+
+		if (status != PLAYER_STATUS::JUMPING)
+		{
+			cout << "status != PLAYER_STATUS::JUMPING (SUCCESS)" << endl;
+		}
+		if (status == PLAYER_STATUS::JUMPING)
+		{
+			cout << "status == PLAYER_STATUS::JUMPING (FAIL)" << endl;
+		}
+		if (jumpHeld)
+		{
+			cout << "jumpHeld (FAIL)" << endl;
+		}
+		if (!jumpHeld)
+		{
+			cout << "!jumpHeld (SUCCESS)" << endl;
+		}
+	}
 	if ( buttonDown[ SDL_CONTROLLER_BUTTON_A ] && status != PLAYER_STATUS::JUMPING && !jumpHeld)
 	{
+		cout << "Jump from ground" << endl;
 		jumpHeld = true;
 		status = JUMPING;	
 		
@@ -301,7 +324,11 @@ void Player::HandleInput(float delta_)
 		canWallJumpRight = false;
 	}
 
-	if ( !buttonDown[ SDL_CONTROLLER_BUTTON_A ] )
+	if ( buttonDown[ SDL_CONTROLLER_BUTTON_A ] )
+	{
+		jumpHeld = true;
+	}
+	else
 	{
 		jumpHeld = false;
 	}
