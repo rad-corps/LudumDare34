@@ -93,6 +93,9 @@
     <ClCompile Include="source\game_state\PSControllerConnect.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="source\GLAH\GLAHSound.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\math\Collision.h">
@@ -192,6 +195,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="source\game_state\PSControllerConnect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="source\GLAH\GLAHSound.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

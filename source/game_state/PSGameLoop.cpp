@@ -18,7 +18,7 @@
 #include "../data/DBLevel.h"
 #include "../math/Collision.h"
 #include "PSMainMenu.h"
-
+#include"../GLAH/GLAHSound.h"
 
 PSGameLoop::PSGameLoop(int level_, std::vector<Player*> players_)
 	: newProgramState(nullptr), gameOverTimer(0.0f), gameOver(false), gameMusic(NULL)
@@ -109,6 +109,7 @@ void PSGameLoop::Reset()
 	state = GS_PLAYING;
 
 	Mix_PlayMusic(gameMusic, -1);
+	GLAHSound::PlaySoundStartNewRound();
 }
 
 void PSGameLoop::SpawnAllProjectiles()
@@ -226,6 +227,7 @@ ProgramState* PSGameLoop::Update(float delta_)
 				{
 					playerKillsText[i].SetText(to_string(cumulativeKills[i]));
 				}
+				GLAHSound::PlaySoundShowScores();
 			}
 		}
 
@@ -314,6 +316,7 @@ void PSGameLoop::PlayerProjectileFired(Vector2 pos_, Vector2 velocity_, float gr
 	{
 		if ( !projectile.IsActive() )
 		{
+			GLAHSound::PlaySoundProjectileShoot();
 			projectile.Shoot(pos_, velocity_, gravity_, playerID_);
 			return;
 		}

@@ -23,6 +23,7 @@
 #include <algorithm>
 #include <map>
 #include "../data/FileSettings.h"
+#include "GLAHSound.h"
 
 
 using namespace std::chrono; 
@@ -126,6 +127,8 @@ int Initialise(int a_iWidth, int a_iHeight, bool a_bFullscreen, const char* a_pW
 		{
 			printf("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
 		}
+
+		GLAHSound::Init();
 
 		SDL_DisplayMode displayMode;
 		int should_be_zero = SDL_GetCurrentDisplayMode(0, &displayMode);

@@ -4,7 +4,7 @@
 #include "../spritesheet/UVTranslator.h"
 #include "../math/Collision.h"
 #include "../globals/consts.h"
-
+#include "../GLAH/GLAHSound.h"
 
 
 Player::Player(int id_)
@@ -168,9 +168,11 @@ void Player::HandleCollision(vector<Platform>& platform_, std::vector<PlayerProj
 					{
 						projectiles++;
 						projectile.SetActive(false);
+						GLAHSound::PlaySoundPickup();
 					}
 					else
 					{
+						GLAHSound::PlaySoundHitPlayer();
 						alive = false;
 						velocity.x = 0;
 						playerProjectileListener->KillEarned(projectile.PlayerID());
@@ -277,37 +279,14 @@ void Player::HandleInput(float delta_)
 		status = STATIONARY;
 	}
 
-	//only jump if not already jumping
-	if (buttonDown[SDL_CONTROLLER_BUTTON_A])
-	{
-		
-		cout << endl << "SDL_CONTROLLER_BUTTON_A" << endl;
-
-		if (status != PLAYER_STATUS::JUMPING)
-		{
-			cout << "status != PLAYER_STATUS::JUMPING (SUCCESS)" << endl;
-		}
-		if (status == PLAYER_STATUS::JUMPING)
-		{
-			cout << "status == PLAYER_STATUS::JUMPING (FAIL)" << endl;
-		}
-		if (jumpHeld)
-		{
-			cout << "jumpHeld (FAIL)" << endl;
-		}
-		if (!jumpHeld)
-		{
-			cout << "!jumpHeld (SUCCESS)" << endl;
-		}
-	}
 	if ( buttonDown[ SDL_CONTROLLER_BUTTON_A ] && status != PLAYER_STATUS::JUMPING && !jumpHeld)
 	{
-		cout << "Jump from ground" << endl;
 		jumpHeld = true;
 		status = JUMPING;	
 		
 		//will only happen for one frame
 		velocity.y -= jumpForce;
+		GLAHSound::PlaySoundJump();
 	}
 	
 	//walljumping
@@ -320,6 +299,7 @@ void Player::HandleInput(float delta_)
 		velocity.y = -jumpForce;
 		velocity.x = -maxSpeed;
 		canWallJumpLeft = false;
+		GLAHSound::PlaySoundJump();
 	}
 	if (buttonDown[SDL_CONTROLLER_BUTTON_A] && canWallJumpRight&& !jumpHeld)
 	{
@@ -330,6 +310,7 @@ void Player::HandleInput(float delta_)
 		velocity.y = -jumpForce;
 		velocity.x = maxSpeed;
 		canWallJumpRight = false;
+		GLAHSound::PlaySoundJump();
 	}
 
 	if ( buttonDown[ SDL_CONTROLLER_BUTTON_A ] )

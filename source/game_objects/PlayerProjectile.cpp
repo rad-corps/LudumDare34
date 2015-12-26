@@ -6,6 +6,7 @@
 #include <iostream>
 #include "../globals/consts.h"
 #include "../math/Collision.h"
+#include "../GLAH/GLAHSound.h"
 
 //float PlayerProjectile::uv[4];
 bool PlayerProjectile::init = false;
@@ -106,6 +107,7 @@ PlayerProjectile::Update(float delta_, std::vector<Platform> platforms_)
 					if (Collision::RectCollision(*platform.Collider(), GetRect()))
 					{
 						collidedWithPlatform = true;
+						GLAHSound::PlaySoundProjectileLand();
 					}
 				}
 			}
