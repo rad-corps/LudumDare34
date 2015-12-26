@@ -207,6 +207,7 @@ void			AddGameControllerListener(GameControllerListener* listener_, int playerID
 
 void			RemoveGameControllerListener(GameControllerListener* listener, int playerID_)
 {
+	joyIDToGCListener.clear();
 	cout << "not yet implemented" << endl;
 	//gameControllerListeners[controllerID_] = nullptr;
 }
@@ -402,11 +403,13 @@ bool FrameworkUpdate()
 		
 		else if( e.type == SDL_CONTROLLERBUTTONDOWN )
         {   
-			joyIDToGCListener[e.cdevice.which]->GamePadButtonDown((SDL_GameControllerButton)e.cbutton.button);			
+			if (joyIDToGCListener.find(e.cdevice.which) != joyIDToGCListener.end() && joyIDToGCListener[e.cdevice.which] != nullptr)
+				joyIDToGCListener[e.cdevice.which]->GamePadButtonDown((SDL_GameControllerButton)e.cbutton.button);			
 		}
 		else if( e.type == SDL_CONTROLLERBUTTONUP )
         {   
-			joyIDToGCListener[e.cdevice.which]->GamePadButtonUp((SDL_GameControllerButton)e.cbutton.button);			
+			if (joyIDToGCListener.find(e.cdevice.which) != joyIDToGCListener.end() && joyIDToGCListener[e.cdevice.which] != nullptr)
+				joyIDToGCListener[e.cdevice.which]->GamePadButtonUp((SDL_GameControllerButton)e.cbutton.button);			
 		}
 		else if ( e.type == SDL_KEYDOWN ) 
 		{

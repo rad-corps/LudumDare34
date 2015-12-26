@@ -13,16 +13,15 @@ TODO
  - get prez to break menu then fix
 
 IN PROGRESS
-
-4. sound
-- gamepad game crashes (when going back to main menu)
+2.sound
 - jetpack
 - particle effects (on death, on projectile hit, projectile flying, jetpack)
 - death animation
-- projectile offset (database drive, reduce from 8)
- 
+3.projectile offset (database drive, reduce from 8)
+- control menu with gamepad
 
 DONE
+- gamepad game crashes (when going back to main menu)
 - show player kills between rounds
   - gather kill data
   - set up screen in PSGameLoop
