@@ -205,7 +205,7 @@ void			AddGameControllerListener(GameControllerListener* listener_, int playerID
 	joyIDToGCListener[joystickID[playerID_]] = listener_;
 }
 
-void			RemoveGameControllerListener(GameControllerListener* listener)
+void			RemoveGameControllerListener(GameControllerListener* listener, int playerID_)
 {
 	cout << "not yet implemented" << endl;
 	//gameControllerListeners[controllerID_] = nullptr;
@@ -370,7 +370,6 @@ bool FrameworkUpdate()
 					joystickID[i] = -1;
 				}
 			}
-
 
 			auto it = joyIDToGCListener.find(e.cdevice.which);
 			joyIDToGCListener.erase(it);

@@ -96,6 +96,8 @@ private:
 	float jumpForce;
 	float accelleration;
 	float terminalVelocity;
+	float projectileVelocity;
+	float projectileGravity;
 
 	std::map<SDL_GameControllerButton, bool> buttonDown;
 

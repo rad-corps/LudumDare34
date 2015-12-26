@@ -13,7 +13,7 @@ public:
 	PlayerProjectile();
 	~PlayerProjectile();	
 
-	void Shoot(Vector2 pos_, Vector2 direction_, int playerID_);
+	void Shoot(Vector2 pos_, Vector2 direction_, float gravity_, int playerID_);
 	virtual void Draw();
 	void Update(float delta_, std::vector<Platform> terrain_);
 	int PlayerID();
@@ -28,4 +28,5 @@ private:
 	SDL_Rect collider;
 	int playerID;
 	bool collidedWithPlatform;
+	float gravity;
 };

@@ -16,7 +16,7 @@ using namespace std;
 	//input handling
 void			AddInputListener(InputListener* inputListener_);
 void			AddGameControllerListener(GameControllerListener* listener_, int playerID_);
-void			RemoveGameControllerListener(GameControllerListener* listener);
+void			RemoveGameControllerListener(GameControllerListener* listener, int playerID_);
 void			RemoveInputListener();
 
 //void			LoadAllGamePads();

@@ -1,26 +1,33 @@
 TODO
+
  - Player stationary animation
  - show player score
+ - inbetween rounds screen
  - end game on 3? 5?
- - unhardcode 20 projectiles on screen
  - player falls out of level (add a ceiling?)
  - bullets out of screen to not get garbage collected (300px out of screen)
- - show player kills between rounds
  - pause screen (GAMELOOPSTATE: GLS_PLAY, GLS_PAUSE, GLS_SHOWKILLS )
  - on screen logger
  - remove onPlatform from Player (run from enum states - set in HandleCollision)
- - death animation
- - player x velocity stops on death
- - Database drive the projectile initial velocity/gravity
  - make database driven vars static. add reload method.
  - get prez to break menu then fix
 
 IN PROGRESS
-
+ - show player kills between rounds
+4. player x velocity stops on death
+5. unhardcode 20 projectiles on screen
+2. Database drive initial projectiles, and number of projectiles to spawn
+ - gamepad game crashes (when going back to main menu)
+ - jetpack
+ - particle effects (on death, on projectile hit, projectile flying, jetpack)
+ - death animation
 
 DONE
+ - Database drive the projectile initial velocity/gravity
+ - player getting stuck on wall
+ - Projectiles to not collide with special platforms
  - jumping bug (retapping 'a' while in air)
- - gamepad game crashes
+
  - aiming projectiles? 
  - show player projectiles above their head
  - set x velocity to 0 when not running and on ground

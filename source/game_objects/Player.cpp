@@ -41,6 +41,13 @@ Player::Player(int id_)
 	jumpForce = dm.GetValueFloat(0, "jump_force");
 	accelleration = dm.GetValueFloat(0, "accelleration");	
 	terminalVelocity = dm.GetValueFloat(0, "terminal_velocity");	
+	projectileVelocity = dm.GetValueFloat(0, "projectile_velocity");
+	projectileGravity = dm.GetValueFloat(0, "projectile_gravity");
+}
+
+Player::~Player(void)
+{
+	RemoveGameControllerListener(this, id);
 }
 
 void Player::SetPos(Vector2 pos_)
@@ -73,10 +80,7 @@ void Player::Reset()
 	projectiles = 3;
 }
 
-Player::~Player(void)
-{
-	RemoveGameControllerListener(this);
-}
+
 
 void Player::InitListener(PlayerProjectileListener* playerProjectileListener_)
 {
@@ -129,20 +133,19 @@ void Player::HandleCollision(vector<Platform>& platform_, std::vector<PlayerProj
 			//check left and right collision on types 2 and 3
 			if  ( env.TileType() == 2 || env.TileType() == 3 )
 			{
-				if ( Collision::RectCollision(leftCollider, *env.Collider()))
+				if ( Collision::RectCollision(leftCollider, *env.Collider()) && velocity.x < -0.1f)
 				{
 					velocity.x = 0;
 					MoveTo(Vector2(env.X() + (TILE_S * FileSettings::GetFloat("SCALE_W")), pos.y));
 					canWallJumpRight = true;
 				}
-				else if ( Collision::RectCollision(rightCollider, *env.Collider()))
+				else if (Collision::RectCollision(rightCollider, *env.Collider()) && velocity.x > 0.1f)
 				{
 					velocity.x = 0;
 					MoveTo(Vector2(env.X() - (PLAYER_S * FileSettings::GetFloat("SCALE_W")), pos.y));
 					canWallJumpLeft = true;
 					//cout << "canWallJumpLeft: " << canWallJumpLeft << endl;
 				}
-
 
 				if ( Collision::RectCollision(topCollider, *env.Collider()))
 				{
@@ -347,52 +350,52 @@ void Player::HandleInput(float delta_)
 			if (buttonDown[SDL_CONTROLLER_BUTTON_DPAD_LEFT] && buttonDown[SDL_CONTROLLER_BUTTON_DPAD_UP])
 			{
 				projectilePos.x -= PROJECTILE_SZ * FileSettings::GetFloat("SCALE_W") + PROJECTILE_OFFSET;
-				playerProjectileListener->PlayerProjectileFired(projectilePos, Vector2(-PROJECTILE_POWER * 0.7f, -PROJECTILE_POWER * 0.7f), id);
+				playerProjectileListener->PlayerProjectileFired(projectilePos, Vector2(-projectileVelocity * 0.7f, -projectileVelocity * 0.7f), projectileGravity, id);
 			}
 			else if (buttonDown[SDL_CONTROLLER_BUTTON_DPAD_LEFT] && buttonDown[SDL_CONTROLLER_BUTTON_DPAD_DOWN])
 			{
 				projectilePos.x -= PROJECTILE_SZ * FileSettings::GetFloat("SCALE_W") + PROJECTILE_OFFSET;
-				playerProjectileListener->PlayerProjectileFired(projectilePos, Vector2(-PROJECTILE_POWER * 0.7f, PROJECTILE_POWER * 0.7f), id);
+				playerProjectileListener->PlayerProjectileFired(projectilePos, Vector2(-projectileVelocity * 0.7f, projectileVelocity * 0.7f), projectileGravity, id);
 			}
 			else if (buttonDown[SDL_CONTROLLER_BUTTON_DPAD_RIGHT] && buttonDown[SDL_CONTROLLER_BUTTON_DPAD_UP])
 			{
 				projectilePos.x += PLAYER_S * FileSettings::GetFloat("SCALE_W") + PROJECTILE_OFFSET;
-				playerProjectileListener->PlayerProjectileFired(projectilePos, Vector2(PROJECTILE_POWER * 0.7f, -PROJECTILE_POWER * 0.7f), id);
+				playerProjectileListener->PlayerProjectileFired(projectilePos, Vector2(projectileVelocity * 0.7f, -projectileVelocity * 0.7f), projectileGravity, id);
 			}
 			else if (buttonDown[SDL_CONTROLLER_BUTTON_DPAD_RIGHT] && buttonDown[SDL_CONTROLLER_BUTTON_DPAD_DOWN])
 			{
 				projectilePos.x += PLAYER_S * FileSettings::GetFloat("SCALE_W") + PROJECTILE_OFFSET;
-				playerProjectileListener->PlayerProjectileFired(projectilePos, Vector2(PROJECTILE_POWER * 0.7f, PROJECTILE_POWER * 0.7f), id);
+				playerProjectileListener->PlayerProjectileFired(projectilePos, Vector2(projectileVelocity * 0.7f, projectileVelocity * 0.7f), projectileGravity, id);
 			}
 			else if (buttonDown[SDL_CONTROLLER_BUTTON_DPAD_RIGHT])
 			{
 				projectilePos.x += PLAYER_S * FileSettings::GetFloat("SCALE_W") + PROJECTILE_OFFSET;
-				playerProjectileListener->PlayerProjectileFired(projectilePos, Vector2(PROJECTILE_POWER, 0.0f), id);
+				playerProjectileListener->PlayerProjectileFired(projectilePos, Vector2(projectileVelocity, 0.0f), projectileGravity, id);
 			}
 			else if (buttonDown[SDL_CONTROLLER_BUTTON_DPAD_DOWN])
 			{
 				projectilePos.y += PLAYER_S * FileSettings::GetFloat("SCALE_H") + PROJECTILE_OFFSET;
-				playerProjectileListener->PlayerProjectileFired(projectilePos, Vector2(0.0f, PROJECTILE_POWER), id);
+				playerProjectileListener->PlayerProjectileFired(projectilePos, Vector2(0.0f, projectileVelocity), projectileGravity, id);
 			}
 			else if (buttonDown[SDL_CONTROLLER_BUTTON_DPAD_LEFT])
 			{
 				projectilePos.x -= PROJECTILE_SZ * FileSettings::GetFloat("SCALE_W") + PROJECTILE_OFFSET;
-				playerProjectileListener->PlayerProjectileFired(projectilePos, Vector2(-PROJECTILE_POWER, 0.0f), id);
+				playerProjectileListener->PlayerProjectileFired(projectilePos, Vector2(-projectileVelocity, 0.0f), projectileGravity, id);
 			}
 			else if (buttonDown[SDL_CONTROLLER_BUTTON_DPAD_UP])
 			{
 				projectilePos.y -= PLAYER_S * FileSettings::GetFloat("SCALE_H") + PROJECTILE_OFFSET;
-				playerProjectileListener->PlayerProjectileFired(projectilePos, Vector2(0.0f, -PROJECTILE_POWER), id);
+				playerProjectileListener->PlayerProjectileFired(projectilePos, Vector2(0.0f, -projectileVelocity), projectileGravity, id);
 			}
 			else if (faceLeft)
 			{
 				projectilePos.x -= PROJECTILE_SZ * FileSettings::GetFloat("SCALE_W") + PROJECTILE_OFFSET;
-				playerProjectileListener->PlayerProjectileFired(projectilePos, Vector2(-PROJECTILE_POWER, 0.0f), id);
+				playerProjectileListener->PlayerProjectileFired(projectilePos, Vector2(-projectileVelocity, 0.0f), projectileGravity, id);
 			}
 			else
 			{
 				projectilePos.x += PLAYER_S * FileSettings::GetFloat("SCALE_W") + PROJECTILE_OFFSET;
-				playerProjectileListener->PlayerProjectileFired(projectilePos, Vector2(PROJECTILE_POWER, 0.0f), id);
+				playerProjectileListener->PlayerProjectileFired(projectilePos, Vector2(projectileVelocity, 0.0f), projectileGravity, id);
 			}
 			
 		}

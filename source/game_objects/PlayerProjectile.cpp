@@ -32,9 +32,10 @@ PlayerProjectile::~PlayerProjectile()
 	cout << "Projectile Created" << endl; 
 }
 
-void PlayerProjectile::Shoot(Vector2 pos_, Vector2 direction_, int playerID_)
+void PlayerProjectile::Shoot(Vector2 pos_, Vector2 direction_, float gravity_, int playerID_)
 {
 //	timer = 0.0f;
+	gravity = gravity_;
 	active = true;
 	pos = pos_;
 	
@@ -74,7 +75,7 @@ PlayerProjectile::Update(float delta_, std::vector<Platform> platforms_)
 	if (active && !collidedWithPlatform)
 	{
 		//apply gravity
-		Vector2 gravityVec(0, PROJECTILE_GRAVITY);
+		Vector2 gravityVec(0, gravity);
 		velocity += gravityVec;
 
 		pos += velocity * delta_;
@@ -89,7 +90,7 @@ PlayerProjectile::Update(float delta_, std::vector<Platform> platforms_)
 		//if the projectile collides with a platform
 		for (auto &platform : platforms_)
 		{
-			if (platform.HasCollider())
+			if (platform.HasCollider() && platform.TileType() != 0)
 			{
 				if (Collision::RectCollision(*platform.Collider(), GetRect()))
 				{

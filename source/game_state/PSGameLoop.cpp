@@ -151,14 +151,14 @@ void PSGameLoop::Draw()
 }
 
 
-void PSGameLoop::PlayerProjectileFired(Vector2 pos_, Vector2 velocity_, int playerID_)
+void PSGameLoop::PlayerProjectileFired(Vector2 pos_, Vector2 velocity_, float gravity_, int playerID_)
 {
 	//find an inactive shell
 	for ( auto &projectile : playerProjectiles )
 	{
 		if ( !projectile.IsActive() )
 		{
-			projectile.Shoot(pos_, velocity_, playerID_);
+			projectile.Shoot(pos_, velocity_, gravity_, playerID_);
 			return;
 		}
 	}
