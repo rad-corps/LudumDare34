@@ -61,8 +61,6 @@ void Player::Reset()
 	alive = true;
 	pos = Vector2(200, 200);
 
-	alive = true;
-
 	////initialise colliders
 	topCollider.w = COLLIDER_SZ;
 	topCollider.h = COLLIDER_SZ;
@@ -172,6 +170,7 @@ void Player::HandleCollision(vector<Platform>& platform_, std::vector<PlayerProj
 				else
 				{
 					alive = false;
+					velocity.x = 0;
 				}				
 			}
 		}

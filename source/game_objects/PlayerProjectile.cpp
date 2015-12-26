@@ -97,6 +97,18 @@ PlayerProjectile::Update(float delta_, std::vector<Platform> platforms_)
 					collidedWithPlatform = true;
 				}
 			}
+
+			//only check these tiletypes when velocity.y > 0
+			if (platform.HasCollider() && platform.TileType() == 0)
+			{
+				if (velocity.y > 0.0f)
+				{
+					if (Collision::RectCollision(*platform.Collider(), GetRect()))
+					{
+						collidedWithPlatform = true;
+					}
+				}
+			}
 		}
 	}
 }

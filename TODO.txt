@@ -14,15 +14,21 @@ TODO
 
 IN PROGRESS
 3. show player kills between rounds
-2. player x velocity stops on death
+
 4. sound
-1. remove old projectiles on round reset
+
  - gamepad game crashes (when going back to main menu)
  - jetpack
  - particle effects (on death, on projectile hit, projectile flying, jetpack)
  - death animation
+ - projectile offset (database drive, reduce from 8)
+ 
 
 DONE
+- player x velocity stops on death
+- remove old projectiles on round reset
+- projectile collision 
+	- check special platforms when velocity.y > 0
  - unhardcode 20 projectiles on screen
  - Database drive initial projectiles, and number of projectiles to spawn
  - Database drive the projectile initial velocity/gravity
