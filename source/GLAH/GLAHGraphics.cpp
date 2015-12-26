@@ -9,6 +9,7 @@
 #include "../globals/consts.h"
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_gamecontroller.h>
+#include <SDL2/SDL_mixer.h>
 //#include "GLAH/GLAHInput.h"
 //#include "GLAH/Shaders.h"
 #include <iostream>
@@ -115,12 +116,16 @@ int Initialise(int a_iWidth, int a_iHeight, bool a_bFullscreen, const char* a_pW
 	
 
     //Initialize SDL
-    if( SDL_Init( SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER   ) < 0 )
+    if( SDL_Init( SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER | SDL_INIT_AUDIO ) < 0 )
     {
         printf( "SDL could not initialize! SDL_Error: %s\n", SDL_GetError() );
     }
 	else
     {
+		if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
+		{
+			printf("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
+		}
 
 		SDL_DisplayMode displayMode;
 		int should_be_zero = SDL_GetCurrentDisplayMode(0, &displayMode);

@@ -13,6 +13,7 @@
 #include "../listeners/CannonListener.h"
 #include "../listeners/PlayerProjectileListener.h"
 #include "../GLAH/Vector.h"
+#include <SDL2/SDL_mixer.h>
 
 enum GAME_STATE {
 	GS_PLAYING,
@@ -73,5 +74,8 @@ private:
 
 	GAME_STATE state;
 	std::vector<GLText> playerKillsText;
+
+	//audio
+	Mix_Music *gameMusic;
 };
 

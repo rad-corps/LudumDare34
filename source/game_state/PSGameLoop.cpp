@@ -21,7 +21,7 @@
 
 
 PSGameLoop::PSGameLoop(int level_, std::vector<Player*> players_)
-	: newProgramState(nullptr), gameOverTimer(0.0f), gameOver(false)
+	: newProgramState(nullptr), gameOverTimer(0.0f), gameOver(false), gameMusic(NULL)
 {
 	currentRoundKills.resize(4);
 	cumulativeKills.resize(4);
@@ -53,7 +53,7 @@ PSGameLoop::PSGameLoop(int level_, std::vector<Player*> players_)
 	dm.Select("./resources/db/dontpanic.db", "game_attributes", "*", "", "", error);
 	initialProjectiles = dm.GetValueFloat(0, "initial_projectiles");
 
-	Reset();
+	
 
 	//set up where the kills data is displayed
 	for (int i = 0; i < playerKillsText.size(); ++i)
@@ -68,6 +68,11 @@ PSGameLoop::PSGameLoop(int level_, std::vector<Player*> players_)
 	translator.GetUV(p3Sprite, 2, 0);
 	translator.GetUV(p4Sprite, 3, 0);
 
+	//load audio
+	gameMusic = Mix_LoadMUS("./resources/sounds/rad2.ogg");
+
+
+	Reset();
 }
 
 PSGameLoop::~PSGameLoop(void)
@@ -77,6 +82,10 @@ PSGameLoop::~PSGameLoop(void)
 	{
 		delete player;
 	}
+
+	//free the music
+	Mix_FreeMusic(gameMusic);
+	gameMusic = NULL;
 
 	//	ClearGamePads();
 }
@@ -98,6 +107,8 @@ void PSGameLoop::Reset()
 	}
 
 	state = GS_PLAYING;
+
+	Mix_PlayMusic(gameMusic, -1);
 }
 
 void PSGameLoop::SpawnAllProjectiles()
