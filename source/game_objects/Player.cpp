@@ -43,6 +43,7 @@ Player::Player(int id_)
 	terminalVelocity = dm.GetValueFloat(0, "terminal_velocity");	
 	projectileVelocity = dm.GetValueFloat(0, "projectile_velocity");
 	projectileGravity = dm.GetValueFloat(0, "projectile_gravity");
+	initialProjectiles = dm.GetValueFloat(0, "initial_projectiles");
 }
 
 Player::~Player(void)
@@ -77,7 +78,7 @@ void Player::Reset()
 
 	UpdateColliders();
 
-	projectiles = 3;
+	projectiles = initialProjectiles;
 }
 
 

@@ -37,6 +37,9 @@ public:
 private:
 	
 	void SpawnAllPlayers();
+	void SpawnAllProjectiles();
+	PlayerProjectile SpawnSingleProjectile(int playerID_);
+	void Reset();
 	//float updateInterval;
 	float gameTimer;
 	
@@ -56,6 +59,8 @@ private:
 	ProgramState* newProgramState;
 	float gameOverTimer;
 	bool gameOver;
-	//World world;
+
+	DatabaseManager dm;
+	int initialProjectiles;
 };
 

@@ -98,6 +98,7 @@ private:
 	float terminalVelocity;
 	float projectileVelocity;
 	float projectileGravity;
+	int initialProjectiles;
 
 	std::map<SDL_GameControllerButton, bool> buttonDown;
 

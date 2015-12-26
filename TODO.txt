@@ -13,16 +13,18 @@ TODO
  - get prez to break menu then fix
 
 IN PROGRESS
- - show player kills between rounds
-4. player x velocity stops on death
-5. unhardcode 20 projectiles on screen
-2. Database drive initial projectiles, and number of projectiles to spawn
+3. show player kills between rounds
+2. player x velocity stops on death
+4. sound
+1. remove old projectiles on round reset
  - gamepad game crashes (when going back to main menu)
  - jetpack
  - particle effects (on death, on projectile hit, projectile flying, jetpack)
  - death animation
 
 DONE
+ - unhardcode 20 projectiles on screen
+ - Database drive initial projectiles, and number of projectiles to spawn
  - Database drive the projectile initial velocity/gravity
  - player getting stuck on wall
  - Projectiles to not collide with special platforms

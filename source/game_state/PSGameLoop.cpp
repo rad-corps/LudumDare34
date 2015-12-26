@@ -16,6 +16,7 @@
 #include "../spritesheet/UVTranslator.h"
 #include "../spritesheet/SpriteSheet.h"
 #include "../data/DBLevel.h"
+#include "../math/Collision.h"
 #include "PSMainMenu.h"
 
 
@@ -35,7 +36,7 @@ PSGameLoop::PSGameLoop(int level_, std::vector<Player*> players_)
 	//cannon.RegisterCannonListener(this);	
 
 	//maximum of 20 player projectiles on screen at once
-	playerProjectiles.resize(20);
+	playerProjectiles.resize(40);
 	
 	for (int i = 0; i < players.size(); ++i)
 	{
@@ -44,9 +45,12 @@ PSGameLoop::PSGameLoop(int level_, std::vector<Player*> players_)
 
 	SetDrawColour(89, 141, 179);	
 
-	SpawnAllPlayers();
-}
+	char * error = "";
+	dm.Select("./resources/db/dontpanic.db", "game_attributes", "*", "", "", error);
+	initialProjectiles = dm.GetValueFloat(0, "initial_projectiles");
 
+	Reset();
+}
 
 PSGameLoop::~PSGameLoop(void)
 {
@@ -56,7 +60,78 @@ PSGameLoop::~PSGameLoop(void)
 		delete player;
 	}
 
-//	ClearGamePads();
+	//	ClearGamePads();
+}
+
+void PSGameLoop::Reset()
+{
+	gameOver = false;
+	for (auto &player : players)
+	{
+		player->Reset();
+	}
+	SpawnAllPlayers();
+	SpawnAllProjectiles();
+	gameOverTimer = 0.0f;
+}
+
+void PSGameLoop::SpawnAllProjectiles()
+{
+	int spawnPoints = players.size() * initialProjectiles;
+	
+	//inactivate all existing projectiles
+	for (auto &projectile : playerProjectiles)
+	{
+		projectile.SetActive(false);
+	}
+
+	int projectileIter = 0;
+	//spawn all projectiles
+	for (auto &player : players)
+	{
+		for (int i = 0; i < initialProjectiles; ++i)
+		{
+			bool spawnAgain;
+			PlayerProjectile projectile;
+
+			do 
+			{
+				spawnAgain = false;
+
+				projectile = SpawnSingleProjectile(player->ID());
+
+				//check if this overlaps an existing tile
+				for (auto &platform : platforms)
+				{
+					if (platform.Collider() != nullptr)
+					{
+						if (Collision::RectCollision(*platform.Collider(), projectile.GetRect()))
+						{
+							spawnAgain = true;
+						}
+					}
+				}
+
+			} while (spawnAgain);
+
+			playerProjectiles[projectileIter] = projectile;
+			++projectileIter;
+		}
+	}
+}
+
+PlayerProjectile PSGameLoop::SpawnSingleProjectile(int playerID_)
+{
+	PlayerProjectile projectile;
+	//randomize a location
+	int screenw = FileSettings::GetInt("SCREEN_W");
+	int screenh = FileSettings::GetInt("SCREEN_H");
+
+	int projX = rand() % screenw;
+	int projY = rand() % screenh;
+
+	projectile.Shoot(Vector2(projX, projY), Vector2(0, 0), 1.0f, playerID_);
+	return projectile;
 }
 
 void PSGameLoop::SpawnAllPlayers()
@@ -96,6 +171,7 @@ void PSGameLoop::GamePadButtonDown(SDL_GameControllerButton button_)
 	std::cout << "GamePadButtonDown(" << button_ << ");" << endl;
 }
 
+
 ProgramState* PSGameLoop::Update(float delta_)
 {
 	//reset the round when one player is left
@@ -104,13 +180,7 @@ ProgramState* PSGameLoop::Update(float delta_)
 		gameOverTimer += delta_;
 		if (gameOverTimer > 3.0f)
 		{
-			gameOver = false;
-			for (auto &player : players)
-			{
-				player->Reset();
-				SpawnAllPlayers();
-				gameOverTimer = 0.0f;
-			}
+			Reset();
 		}
 	}
 
