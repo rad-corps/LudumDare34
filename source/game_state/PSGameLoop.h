@@ -62,8 +62,14 @@ private:
 	DatabaseManager dm;
 	int initialProjectiles;
 
+	//Stuff for inbetween rounds
 	std::vector<int> currentRoundKills;
 	std::vector<int> cumulativeKills;
+
+	float p1Sprite[4];
+	float p2Sprite[4];
+	float p3Sprite[4];
+	float p4Sprite[4];
 
 	GAME_STATE state;
 	std::vector<GLText> playerKillsText;

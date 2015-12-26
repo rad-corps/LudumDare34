@@ -13,18 +13,21 @@ TODO
  - get prez to break menu then fix
 
 IN PROGRESS
-3. show player kills between rounds
 
 4. sound
-
- - gamepad game crashes (when going back to main menu)
- - jetpack
- - particle effects (on death, on projectile hit, projectile flying, jetpack)
- - death animation
- - projectile offset (database drive, reduce from 8)
+- gamepad game crashes (when going back to main menu)
+- jetpack
+- particle effects (on death, on projectile hit, projectile flying, jetpack)
+- death animation
+- projectile offset (database drive, reduce from 8)
  
 
 DONE
+- show player kills between rounds
+  - gather kill data
+  - set up screen in PSGameLoop
+  - Display player sprites
+  - Display kill numbers next to sprites
 - player x velocity stops on death
 - remove old projectiles on round reset
 - projectile collision 

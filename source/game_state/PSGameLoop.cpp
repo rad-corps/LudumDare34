@@ -61,6 +61,13 @@ PSGameLoop::PSGameLoop(int level_, std::vector<Player*> players_)
 		playerKillsText[i].SetPos(Vector2(100, 50 * i));
 	}
 
+	//set up the player sprite UVs for between rounds
+	UVTranslator translator(512, 512, 32, 32);
+	translator.GetUV(p1Sprite, 0, 0);
+	translator.GetUV(p2Sprite, 1, 0);
+	translator.GetUV(p3Sprite, 2, 0);
+	translator.GetUV(p4Sprite, 3, 0);
+
 }
 
 PSGameLoop::~PSGameLoop(void)
@@ -261,10 +268,30 @@ void PSGameLoop::Draw()
 	}
 	else if (state == GS_SHOWSCORE)
 	{
-		for (auto &text : playerKillsText)
-		{
-			text.Draw();
-		}
+
+		SetSpriteUVCoordinates(SpriteSheet::PlayerSprite(), p1Sprite);
+		MoveSprite(SpriteSheet::PlayerSprite(), (FileSettings::GetInt("SCREEN_W") / 2) - 100, (FileSettings::GetInt("SCREEN_H") / 2) - (PLAYER_S + 4) * 2);
+		DrawSprite(SpriteSheet::PlayerSprite(), false, 1.0f, true);
+		playerKillsText[0].SetPos(Vector2((FileSettings::GetInt("SCREEN_W") / 2), ((FileSettings::GetInt("SCREEN_H") / 2) - (PLAYER_S + 4) * 2) + 32));
+		playerKillsText[0].Draw();
+
+		SetSpriteUVCoordinates(SpriteSheet::PlayerSprite(), p2Sprite);
+		MoveSprite(SpriteSheet::PlayerSprite(), (FileSettings::GetInt("SCREEN_W") / 2) - 100, (FileSettings::GetInt("SCREEN_H") / 2) - (PLAYER_S + 4) * 1);
+		DrawSprite(SpriteSheet::PlayerSprite(), false, 1.0f, true);
+		playerKillsText[1].SetPos(Vector2((FileSettings::GetInt("SCREEN_W") / 2), ((FileSettings::GetInt("SCREEN_H") / 2) - (PLAYER_S + 4) * 1) + 32));
+		playerKillsText[1].Draw();
+
+		SetSpriteUVCoordinates(SpriteSheet::PlayerSprite(), p3Sprite);
+		MoveSprite(SpriteSheet::PlayerSprite(), (FileSettings::GetInt("SCREEN_W") / 2) - 100, (FileSettings::GetInt("SCREEN_H") / 2));
+		DrawSprite(SpriteSheet::PlayerSprite(), false, 1.0f, true);
+		playerKillsText[2].SetPos(Vector2((FileSettings::GetInt("SCREEN_W") / 2), ((FileSettings::GetInt("SCREEN_H") / 2)) + 32));
+		playerKillsText[2].Draw();
+
+		SetSpriteUVCoordinates(SpriteSheet::PlayerSprite(), p4Sprite);
+		MoveSprite(SpriteSheet::PlayerSprite(), (FileSettings::GetInt("SCREEN_W") / 2) - 100, (FileSettings::GetInt("SCREEN_H") / 2) + (PLAYER_S + 4) * 1);
+		DrawSprite(SpriteSheet::PlayerSprite(), false, 1.0f, true);
+		playerKillsText[3].SetPos(Vector2((FileSettings::GetInt("SCREEN_W") / 2), ((FileSettings::GetInt("SCREEN_H") / 2) + (PLAYER_S + 4) * 1) + 32));
+		playerKillsText[3].Draw();
 	}
 }
 
