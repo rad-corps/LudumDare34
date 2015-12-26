@@ -8,7 +8,7 @@ class PlayerProjectileListener
 {
 public:
 	virtual void PlayerProjectileFired(Vector2 pos_, Vector2 velocity_, float gravity_, int playerID_) = 0;
-
+	virtual void KillEarned(int playerID_) = 0;
 	//CannonListener();
 	//virtual ~CannonListener(); 
 

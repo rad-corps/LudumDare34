@@ -20,9 +20,13 @@
 #include "PSMainMenu.h"
 
 
-PSGameLoop::PSGameLoop(int level_, std::vector<Player*> players_) 
+PSGameLoop::PSGameLoop(int level_, std::vector<Player*> players_)
 	: newProgramState(nullptr), gameOverTimer(0.0f), gameOver(false)
 {
+	currentRoundKills.resize(4);
+	cumulativeKills.resize(4);
+	playerKillsText.resize(4);
+
 	players = players_;
 	AddInputListener(this);
 	cout << "PSGameLoop" << endl;
@@ -32,24 +36,31 @@ PSGameLoop::PSGameLoop(int level_, std::vector<Player*> players_)
 	dbLevel.FillData(level, platforms);
 
 	gameTimer = 0.f;
-	
+
 	//cannon.RegisterCannonListener(this);	
 
 	//maximum of 20 player projectiles on screen at once
 	playerProjectiles.resize(40);
-	
+
 	for (int i = 0; i < players.size(); ++i)
 	{
 		players[i]->InitListener(this);
 	}
 
-	SetDrawColour(89, 141, 179);	
+	SetDrawColour(89, 141, 179);
 
 	char * error = "";
 	dm.Select("./resources/db/dontpanic.db", "game_attributes", "*", "", "", error);
 	initialProjectiles = dm.GetValueFloat(0, "initial_projectiles");
 
 	Reset();
+
+	//set up where the kills data is displayed
+	for (int i = 0; i < playerKillsText.size(); ++i)
+	{
+		playerKillsText[i].SetPos(Vector2(100, 50 * i));
+	}
+
 }
 
 PSGameLoop::~PSGameLoop(void)
@@ -73,6 +84,13 @@ void PSGameLoop::Reset()
 	SpawnAllPlayers();
 	SpawnAllProjectiles();
 	gameOverTimer = 0.0f;
+	
+	for (int &kills : currentRoundKills)
+	{
+		kills = 0;
+	}
+
+	state = GS_PLAYING;
 }
 
 void PSGameLoop::SpawnAllProjectiles()
@@ -174,50 +192,80 @@ void PSGameLoop::GamePadButtonDown(SDL_GameControllerButton button_)
 
 ProgramState* PSGameLoop::Update(float delta_)
 {
-	//reset the round when one player is left
-	if (gameOver)
+	if (state == GS_PLAYING)
 	{
-		gameOverTimer += delta_;
-		if (gameOverTimer > 3.0f)
+		//reset the round when one player is left
+		if (gameOver)
 		{
-			Reset();
+			gameOverTimer += delta_;
+			if (gameOverTimer > 1.5f)
+			{
+				showKillsTimer = 0.0f;
+				state = GS_SHOWSCORE;	
+				//set the text on the textfields
+
+				for (int i = 0; i < playerKillsText.size(); ++i)
+				{
+					playerKillsText[i].SetText(to_string(cumulativeKills[i]));
+				}
+			}
 		}
-	}
 
-	int numPlayersAlive = 0;
-	//update player	
-	for (auto &player : players)
+		int numPlayersAlive = 0;
+		//update player	
+		for (auto &player : players)
+		{
+			if (player->Update(delta_, platforms, playerProjectiles))
+				numPlayersAlive++;
+		}
+
+		if (numPlayersAlive < 2)
+		{
+			gameOver = true;
+		}
+
+		//update platforms
+		for (auto &env : platforms)
+			env.Update(delta_);
+
+		for (auto &projectiles : playerProjectiles)
+			projectiles.Update(delta_, platforms);
+
+		return newProgramState;
+	}
+	else if (state == GS_SHOWSCORE)
 	{
-		if (player->Update(delta_, platforms, playerProjectiles))
-			numPlayersAlive++;
+		showKillsTimer += delta_;
+		if (showKillsTimer > 3.0f)
+		{
+			state = GS_PLAYING;
+			Reset();			
+		}
+		return nullptr;
 	}
-
-	if (numPlayersAlive < 2)
-	{
-		gameOver = true;
-	}
-
-	//update platforms
-	for ( auto &env : platforms )
-		env.Update(delta_);		
-
-	for ( auto &projectiles : playerProjectiles)
-		projectiles.Update(delta_, platforms);
-
-	return newProgramState;
 }
 
 //Draw Game
 void PSGameLoop::Draw()
 {
-	for ( auto &projectiles : playerProjectiles)
-		projectiles.Draw();
+	if (state == GS_PLAYING)
+	{
+		for (auto &projectiles : playerProjectiles)
+			projectiles.Draw();
 
-	for (auto &env : platforms )
-		env.Draw();		
+		for (auto &env : platforms)
+			env.Draw();
 
-	for ( auto &player : players )
-		player->Draw();			
+		for (auto &player : players)
+			player->Draw();
+	}
+	else if (state == GS_SHOWSCORE)
+	{
+		for (auto &text : playerKillsText)
+		{
+			text.Draw();
+		}
+	}
 }
 
 
@@ -232,4 +280,10 @@ void PSGameLoop::PlayerProjectileFired(Vector2 pos_, Vector2 velocity_, float gr
 			return;
 		}
 	}
+}
+
+void PSGameLoop::KillEarned(int playerID_)
+{
+	++currentRoundKills[playerID_];
+	++cumulativeKills[playerID_];
 }

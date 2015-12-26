@@ -14,6 +14,11 @@
 #include "../listeners/PlayerProjectileListener.h"
 #include "../GLAH/Vector.h"
 
+enum GAME_STATE {
+	GS_PLAYING,
+	GS_SHOWSCORE
+};
+
 class PSGameLoop : public ProgramState,/*public CannonListener, */ public InputListener, public PlayerProjectileListener
 {
 public:
@@ -31,6 +36,7 @@ public:
 
 	//virtual void ShotFired(Vector2 pos_, Vector2 velocity_);
 	virtual void PlayerProjectileFired(Vector2 pos_, Vector2 velocity_, float gravity_, int playerID_);
+	virtual void KillEarned(int playerID_);
 	virtual void KeyDown(SDL_Keycode key_);
 	virtual void GamePadButtonDown(SDL_GameControllerButton button_);
 
@@ -40,27 +46,26 @@ private:
 	void SpawnAllProjectiles();
 	PlayerProjectile SpawnSingleProjectile(int playerID_);
 	void Reset();
-	//float updateInterval;
 	float gameTimer;
 	
-	//Player player;
-	//Cannon cannon;
-	//Camera camera;
-	//Goal goal;
 	int level;
 
 	std::vector<Player*> players;
-	//std::vector<Enemy> enemies;
 	std::vector<Platform> platforms;
-	//std::vector<Shell> shells;
-	//std::vector<EnemySpawner> enemySpawners;
 	std::vector<PlayerProjectile> playerProjectiles;
 
 	ProgramState* newProgramState;
-	float gameOverTimer;
+	float gameOverTimer; //
+	float showKillsTimer; //inbetween rounds
 	bool gameOver;
 
 	DatabaseManager dm;
 	int initialProjectiles;
+
+	std::vector<int> currentRoundKills;
+	std::vector<int> cumulativeKills;
+
+	GAME_STATE state;
+	std::vector<GLText> playerKillsText;
 };
 

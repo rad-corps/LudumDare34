@@ -112,14 +112,14 @@ void Player::HandleCollision(vector<Platform>& platform_, std::vector<PlayerProj
 
 	canWallJumpRight = false;
 	canWallJumpLeft = false;
-	for ( auto &env : platform_ )
+	for (auto &env : platform_)
 	{
-		if ( env.Active() && env.Collider() != nullptr)
-		{			
+		if (env.Active() && env.Collider() != nullptr)
+		{
 			//only check bottom collision with platform if we are falling. 			
-			if ( velocity.y > -0.1f ) 
+			if (velocity.y > -0.1f)
 			{
-				if ( Collision::RectCollision(bottomCollider, *env.Collider()))
+				if (Collision::RectCollision(bottomCollider, *env.Collider()))
 				{
 					status = RUNNING;
 					onPlatform = true;
@@ -130,9 +130,9 @@ void Player::HandleCollision(vector<Platform>& platform_, std::vector<PlayerProj
 			}
 
 			//check left and right collision on types 2 and 3
-			if  ( env.TileType() == 2 || env.TileType() == 3 )
+			if (env.TileType() == 2 || env.TileType() == 3)
 			{
-				if ( Collision::RectCollision(leftCollider, *env.Collider()) && velocity.x < -0.1f)
+				if (Collision::RectCollision(leftCollider, *env.Collider()) && velocity.x < -0.1f)
 				{
 					velocity.x = 0;
 					MoveTo(Vector2(env.X() + (TILE_S * FileSettings::GetFloat("SCALE_W")), pos.y));
@@ -146,32 +146,37 @@ void Player::HandleCollision(vector<Platform>& platform_, std::vector<PlayerProj
 					//cout << "canWallJumpLeft: " << canWallJumpLeft << endl;
 				}
 
-				if ( Collision::RectCollision(topCollider, *env.Collider()))
+				if (Collision::RectCollision(topCollider, *env.Collider()))
 				{
-					if  (velocity.y < 0)
+					if (velocity.y < 0)
 						velocity.y = 0;
-						//velocity.y = -velocity.y;
+					//velocity.y = -velocity.y;
 				}
 			}
 		}
 	}
 
-	for ( auto &projectile : projectiles_ )
+	if (alive)
 	{
-		if (projectile.IsActive())
+		for (auto &projectile : projectiles_)
 		{
-			if (Collision::RectCollision(hitCollider, projectile.GetRect()))
+			if (projectile.IsActive())
 			{
-				if (projectile.PlayerID() == id)
+				if (Collision::RectCollision(hitCollider, projectile.GetRect()))
 				{
-					projectiles++;					
-					projectile.SetActive(false);
+					if (projectile.PlayerID() == id)
+					{
+						projectiles++;
+						projectile.SetActive(false);
+					}
+					else
+					{
+						alive = false;
+						velocity.x = 0;
+						playerProjectileListener->KillEarned(projectile.PlayerID());
+						//TODO notify PSGameLoop of who the kill is allocated to projectile.PlayerID()
+					}
 				}
-				else
-				{
-					alive = false;
-					velocity.x = 0;
-				}				
 			}
 		}
 	}
@@ -340,7 +345,6 @@ void Player::HandleInput(float delta_)
 	{
 		shootHeld = true;
 		
-		//TODO REVISIT IMPORTANT SCALE PROJECTILE POSITION
 		if (projectiles > 0)
 		{
 			--projectiles;
@@ -489,7 +493,9 @@ bool Player::Update(float delta_, vector<Platform>& platform_, std::vector<Playe
 	prevY = pos.y;
 	
 	if (alive)
+	{
 		HandleInput(delta_);
+	}
 
 	ApplyGravity();	
 	ApplyVelocity(velocity);	
@@ -497,8 +503,11 @@ bool Player::Update(float delta_, vector<Platform>& platform_, std::vector<Playe
 	HandleCollision(platform_, projectiles_);
 	UpdateAnimation(delta_);
 
-	if (alive)
+	if ( alive)
+	{
 		return true;
+	}
+		
 	return false;
 }
 
