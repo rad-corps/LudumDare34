@@ -15,7 +15,7 @@ Player::Player(int id_)
 	Reset();
 
 	velocity = Vector2(0,0);
-	status = PLAYER_STATUS::STATIONARY;
+	
 
 	//initialise animations
 	UVTranslator translator(512, 512, 32, 32);
@@ -25,11 +25,7 @@ Player::Player(int id_)
 	translator.GetUV(animMove3, id, 3);
 	translator.GetUV(animDead, id, 4);
 	
-	currentAnimation = animStationary;
-
-	animationTimer = 0.0f;
-	faceLeft = false;
-	onPlatform = false;
+	
 
 	playerSpeak.SetAlignment(TEXT_ALIGNMENT::ALIGN_RIGHT);
 
@@ -58,7 +54,11 @@ void Player::SetPos(Vector2 pos_)
 
 void Player::Reset()
 {
+	animationTimer = 0.0f;
+	faceLeft = false;
+	onPlatform = false;
 	alive = true;
+	status = PLAYER_STATUS::STATIONARY;
 	pos = Vector2(200, 200);
 
 	////initialise colliders
@@ -77,6 +77,8 @@ void Player::Reset()
 	UpdateColliders();
 
 	projectiles = initialProjectiles;
+
+	currentAnimation = animStationary;
 }
 
 
@@ -121,7 +123,7 @@ void Player::HandleCollision(vector<Platform>& platform_, std::vector<PlayerProj
 			{
 				if (Collision::RectCollision(bottomCollider, *env.Collider()))
 				{
-					status = RUNNING;
+					//status = RUNNING;
 					onPlatform = true;
 					velocity.y = 0;
 					//push him back up to the top of the platform
@@ -259,6 +261,7 @@ void Player::HandleInput(float delta_)
 	else if (onPlatform)
 	{
 		velocity.x = 0.0f;
+		status = STATIONARY;
 	}
 	else if (!onPlatform)//drag
 	{
@@ -272,11 +275,6 @@ void Player::HandleInput(float delta_)
 	if (velocity.x < -maxSpeed)
 	{
 		velocity.x = -maxSpeed;
-	}
-
-	else if ( onPlatform ) 
-	{
-		status = STATIONARY;
 	}
 
 	if ( buttonDown[ SDL_CONTROLLER_BUTTON_A ] && status != PLAYER_STATUS::JUMPING && !jumpHeld)

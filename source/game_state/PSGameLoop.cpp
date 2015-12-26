@@ -70,7 +70,7 @@ PSGameLoop::PSGameLoop(int level_, std::vector<Player*> players_)
 
 	//load audio
 	gameMusic = Mix_LoadMUS("./resources/sounds/rad2.ogg");
-
+	Mix_PlayMusic(gameMusic, -1);
 
 	Reset();
 }
@@ -108,7 +108,7 @@ void PSGameLoop::Reset()
 
 	state = GS_PLAYING;
 
-	Mix_PlayMusic(gameMusic, -1);
+	
 	GLAHSound::PlaySoundStartNewRound();
 }
 
